@@ -1,4 +1,4 @@
 import json
 
-with open('./data/img.json', 'r') as imgs:
+with open('./data/imgs.json', 'r') as imgs:
     imgs = json.load(imgs)

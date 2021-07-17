@@ -1,5 +1,5 @@
-def IS_PYTHON_FILE(file):
+def is_python_file(file):
     return file.endswith('.py')
 
-def IS_JSON_FILE(file):
+def is_json_file(file):
     return file.endswith('.json')
