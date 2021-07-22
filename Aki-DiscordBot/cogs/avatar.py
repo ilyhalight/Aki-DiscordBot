@@ -25,7 +25,7 @@ class Avatar(commands.Cog):
         emb = discord.Embed(title = f'Аватар пользователя {user}', colour = colors['black'])
         emb.set_image(url = avatar(user))
         await ctx.send(embed = emb)
-        logger.info(f'Выведен аватар пользователя {user} - Пользователь {ctx.author} запросил аватар.')
+        logger.info(f'Выведен аватар пользователя {user} - Пользователь: {ctx.author} ({ctx.author.id}).')
 
 def setup(bot):
     bot.add_cog(Avatar(bot))
