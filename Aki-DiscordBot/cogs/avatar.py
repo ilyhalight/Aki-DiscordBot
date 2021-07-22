@@ -4,7 +4,6 @@ from discord.ext import commands
 
 from core.bot import avatar
 from core.logger import logger
-from scripts.parsers.settings import settings
 from data.colors import colors
 
 class Avatar(commands.Cog):
