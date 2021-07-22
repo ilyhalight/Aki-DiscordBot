@@ -3,6 +3,8 @@ import discord
 from discord.ext import commands
 
 from core.bot import avatar
+from core.logger import logger
+from scripts.parsers.settings import settings
 from data.colors import colors
 
 class Avatar(commands.Cog):
@@ -23,6 +25,7 @@ class Avatar(commands.Cog):
         emb = discord.Embed(title = f'Аватар пользователя {user}', colour = colors['black'])
         emb.set_image(url = avatar(user))
         await ctx.send(embed = emb)
+        logger.info(f'Выведен аватар пользователя {user} - Пользователь {ctx.author} запросил аватар.')
 
 def setup(bot):
     bot.add_cog(Avatar(bot))
