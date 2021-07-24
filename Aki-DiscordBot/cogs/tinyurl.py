@@ -29,15 +29,17 @@ class Tiny_url(commands.Cog):
             emb.set_footer(text = 'Aki © 2021 Все права защищены', icon_url = avatar(self.bot.user))
             emb.set_thumbnail(url = imgs['tinyurl'])
             await ctx.send(embed = emb)
+            logger.info(f'Информация о "тюрл" - Пользователь: {ctx.author} ({ctx.author.id}).')
         else:
             short_link = pyshorteners.Shortener().tinyurl.short(link)
             emb = discord.Embed(title = '', color = colors['help'])
-            emb.add_field(name = '<:link:868572405059174533>Первоначальная ссылка', value = f'⠀⠀{link}', inline = False)
-            emb.add_field(name = '<:link:868572405059174533>Сокращенная ссылка', value = f'⠀⠀{short_link}', inline = False)
+            emb.add_field(name = ':link:Первоначальная ссылка', value = f'⠀⠀{link}', inline = False)
+            emb.add_field(name = ':link:Сокращенная ссылка', value = f'⠀⠀{short_link}', inline = False)
             emb.set_footer(text = 'Aki © 2021 Все права защищены', icon_url = avatar(self.bot.user))
             emb.set_author(name = 'Ссылка успешно сокращена')
             emb.set_thumbnail(url = imgs['tinyurl'])
             await ctx.send(embed = emb)
+            logger.success(f'Ссылка "{link}" сокращена - Пользователь: {ctx.author} ({ctx.author.id}).')
 
 def setup(bot):
     bot.add_cog(Tiny_url(bot))
