@@ -3,11 +3,11 @@
     "parser"        :   "https://w7.pngwing.com/pngs/925/569/png-transparent-gear-computer-icons-desktop-wood-gear-computer-desktop-wallpaper-black-gear.png",
     "avito"         :   "http://i.otzovik.com/objects/b/30000/20468.png",
     "layout"        :   "https://flaticon.com/premium-icon/icons/svg/2867/2867522.svg",
-    "tiny_url"      :   "https://flaticon.com/premium-icon/icons/svg/2867/3214679.svg",
     "backup"        :   "https://flaticon.com/premium-icon/icons/svg/2867/2833650.svg",
     "youtube"       :   "https://flaticon.com/premium-icon/icons/svg/2867/1384060.svg",
     "no_permissions":   "https://flaticon.com/premium-icon/icons/svg/2867/2537585.svg",
     "success": "https://flaticon.com/premium-icon/icons/svg/2867/845646.svg",
     "error": "https://flaticon.com/premium-icon/icons/svg/2867/1304037.svg",
-    "help": "https://flaticon.com/premium-icon/icons/svg/2867/3437273.svg"
+    "help": "https://flaticon.com/premium-icon/icons/svg/2867/3437273.svg",
+    "tinyurl" :   "https://flaticon.com/premium-icon/icons/svg/2867/3214679.svg"
 }
