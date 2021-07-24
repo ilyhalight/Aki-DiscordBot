@@ -5,6 +5,7 @@ from discord.ext import commands
 from core.bot import avatar
 from scripts.parsers.owner import owner
 from scripts.parsers.settings import settings
+from core.logger import logger
 from data.colors import colors
 from data.info import __version__, __status__
 
@@ -28,6 +29,7 @@ class Bot_info(commands.Cog):
         emb.set_thumbnail(url = avatar(self.bot.user))
         emb.set_footer(text = 'Aki © 2021 Все права защищены', icon_url = avatar(self.bot.user))
         await ctx.send(embed = emb)
+        logger.info(f'Информация о Боте - Пользователь: {ctx.author} ({ctx.author.id}).')
 
 def setup(bot):
     bot.add_cog(Bot_info(bot))
