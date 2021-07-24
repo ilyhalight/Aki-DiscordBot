@@ -1,6 +1,10 @@
 import discord
 import time
 import psutil as ps
+import platform
+import distro
+import os
+import sys
 
 from discord.ext import commands
 
@@ -8,39 +12,12 @@ from core.bot import avatar
 from data.colors import colors
 from core.logger import logger
 
+
+
 start_time = time.time()
-
-ping_list = [
-            {
-                'ping': 0.00000000000000000,
-                'emoji': '🟩🔳🔳🔳🔳'
-            },
-            {
-                'ping': 0.10000000000000000,
-                'emoji': '🟧🟩🔳🔳🔳'
-            },
-            {
-                'ping': 0.15000000000000000,
-                'emoji': '🟥🟧🟩🔳🔳'
-            },
-            {
-                'ping': 0.20000000000000000,
-                'emoji': '🟥🟥🟧🟩🔳'
-            },
-            {
-                'ping': 0.25000000000000000,
-                'emoji': '🟥🟥🟥🟧🟩'
-            },
-            {
-                'ping': 0.30000000000000000,
-                'emoji': '🟥🟥🟥🟥🟧'
-            },
-            {
-                'ping': 0.35000000000000000,
-                'emoji': '🟥🟥🟥🟥🟥'
-            }
-]
-
+IS_WINDOWS = os.name == 'nt'
+IS_MAC = sys.platform == 'darwin'
+IS_LINUX = sys.platform == 'linux'
 def bytes2Human(number, typer = None): # Thanks Fsoky community
         # Пример Работы Этой Функции перевода чисел:
         # >> bytes2Human(10000)
@@ -72,15 +49,10 @@ class Resource(commands.Cog):
 
     @commands.command(aliases = [
                                 'resources', 'resource', 'bot_resources', 'bot_resource',
-                                'загруженность', 'загруженностьбота', 'загруженность_бота', 'ресурсыбота', 'ресурсы_бота'])
+                                'загруженность', 'загруженностьбота', 'загруженность_бота', 'ресурсы', 'ресурсыбота', 'ресурсы_бота', 'потребление', 'потребление_ресурсов', 'потреблениересурсов'])
     async def resource_analytics_command(self, ctx):
         mem = ps.virtual_memory()
         ping = self.bot.ws.latency
-
-        for ping_one in ping_list:
-            if ping <= ping_one["ping"]:
-                ping_emoji = ping_one["emoji"]
-                break
 
         time_up = time.time() - start_time
         days_up = round(time_up) // 86400
@@ -89,16 +61,37 @@ class Resource(commands.Cog):
         time_up %= 3600
         minutes_up = round(time_up) // 60
         time_up = round(time_up % 60)
-        msg = f"**{days_up}** дн. **{hours_up}** час. **{minutes_up}** мин. **{time_up}** сек. назад :alarm_clock: "
+        if days_up == 0 and hours_up == 0 and minutes_up == 0:
+            msg = f"**{time_up}** сек. назад"
+        elif days_up == 0 and hours_up == 0:
+            msg = f"**{minutes_up}** мин. назад"
+        elif days_up == 0:
+            msg = f"**{hours_up}** час. назад"
+        elif days_up > 0:
+            msg = f"**{days_up}** дн. назад"
+        else:
+            msg = f"**{days_up}** дн. **{hours_up}** час. **{minutes_up}** мин. **{time_up}** сек. назад"
 
-        emb = discord.Embed(title = 'Загрузка бота', color = colors['help'])
-        emb.add_field(name = 'Использование CPU', value = f'В настоящее время используется: {ps.cpu_percent()}%', inline = True)
-        emb.add_field(name = 'Использование RAM', value = f'Доступно: {bytes2Human(mem.available, "system")}\n' f'Используется: {bytes2Human(mem.used, "system")} ({mem.percent}%)\n' f'Всего: {bytes2Human(mem.total, "system")}', inline = True)
-        emb.add_field(name = 'Пинг Бота', value = f'Пинг: {ping * 1000:.0f}ms\n'f'`{ping_emoji}`', inline = True)
-        emb.add_field(name = 'Бот запустился:', value = msg, inline = True)
+        if IS_WINDOWS:
+            os_info = platform.uname()
+            os_version = f'{os_info.system} {os_info.release}'
+        elif IS_MAC:
+            os_info = platform.mac_ver()
+            os_version = f'Mac OS X {os_info[0]} {os_info[2]}'
+        else:
+            os_info = distro.linux_distribution()
+            os_version = f'{os_info[0]} {os_info[1]}'
+
+        emb = discord.Embed(title = 'Потребление ресурсов', color = colors['help'])
+        emb.add_field(name = '<:cpu:868488839671476314>CPU', value = f'⠀⠀{ps.cpu_percent()}%', inline = True)
+        emb.add_field(name = '<:ram:868489182383845376>RAM', value = f'⠀⠀{bytes2Human(mem.used, "system")}/{bytes2Human(mem.total, "system")}', inline = True)
+        emb.add_field(name = '<:ping:868489884023787580>PING', value = f'⠀⠀{ping * 1000:.0f}ms\n', inline = True)
+        emb.add_field(name = '<:os:868494322415312926>OS:', value = f'⠀⠀{os_version}', inline = True)
+        emb.add_field(name = '<:start:868490519410511902>LAUNCH:', value = f'⠀⠀{msg}', inline = True)
         emb.set_footer(text = 'Aki © 2021 Все права защищены', icon_url = avatar(self.bot.user))
+        emb.set_thumbnail(url = avatar(self.bot.user))
         await ctx.send(embed = emb)
-        logger.info(f'Информация о загруженности боте- Пользователь: {ctx.author} ({ctx.author.id}).')
+        logger.info(f'Информация о загруженности боте - Пользователь: {ctx.author} ({ctx.author.id}).')
 
 def setup(bot):
     bot.add_cog(Resource(bot))
