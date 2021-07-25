@@ -50,7 +50,7 @@ class Resource(commands.Cog):
     @commands.command(aliases = [
                                 'resources', 'resource', 'bot_resources', 'bot_resource',
                                 'загруженность', 'загруженностьбота', 'загруженность_бота', 'ресурсы', 'ресурсыбота', 'ресурсы_бота', 'потребление', 'потребление_ресурсов', 'потреблениересурсов'])
-    async def resource_analytics_command(self, ctx):
+    async def resource_command(self, ctx):
         mem = ps.virtual_memory()
         ping = self.bot.ws.latency
 

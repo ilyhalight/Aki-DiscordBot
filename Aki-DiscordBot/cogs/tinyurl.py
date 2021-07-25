@@ -20,7 +20,7 @@ class Tiny_url(commands.Cog):
                                 'shortlink', 'surl', 'slink', 'shorturl', 'tinylink', 'turl', 'tlink', 'create_tiny_url',
                                 'шортлинк',  'сюрл', 'слинк', 'шортюрл',  'тинилинк', 'тюрл', 'тлинк', 'тиниюрл', 'сделать_короткую_ссылку', 'создать_короткую_ссылку'
                                 ])
-    async def tiny_url_command(self, ctx, link: str = None):
+    async def tinyurl_command(self, ctx, link: str = None):
         if link == None:
             emb = discord.Embed(title = 'Помощник - Сокращение ссылок', color = colors['help'])
             emb.add_field(name = 'Использование', value = f'`{settings["prefix"]}тюрл <ссылка>`', inline = False)
