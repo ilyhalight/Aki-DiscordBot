@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 
 from core.bot import bot
 from core.cogs import init_commands
+from core.events import init_events
 from core.logger import logger
 from scripts.checks import is_python_file
 from scripts.console import clear
@@ -27,6 +28,11 @@ def run():
         init_commands()
     except:
         logger.error('Не удалось инициализировать управление когами - Пользователь: SYSTEM.')
+    try:
+        init_events()
+    except:
+        logger.error('Не удалось инициализировать ивенты - Пользователь: SYSTEM.')
+
     try:
         bot.run(os.environ.get('DISCORD_TOKEN'))
     except discord.LoginFailure:
