@@ -37,7 +37,7 @@ class Reactions(commands.Cog):
                 logger.success(f'В сообщение "{message.id}" были очищены все реакции - Пользователь: {ctx.author} ({ctx.author.id}).')
         else:
             emb = discord.Embed(title = 'Помощник - Реакции', color = colors['help'])
-            emb.add_field(name = 'Использование', value = f'`{settings["prefix"]}реакция <действие> <id сообщения> <реакция>`\n┗ Произведёт действие с реакциями в сообщение с заданным айди.', inline = False)
+            emb.add_field(name = 'Использование', value = f'`{settings["prefix"]}реакция <действие> <id сообщения> <реакция>`', inline = False)
             emb.add_field(name = 'Пример 1', value = f'`{settings["prefix"]}реакция добавить 824428281104564264 :thumbsup:`\n┗ Добавит к сообщению с заданным айди реакцию :thumbsup:.', inline = False)
             emb.add_field(name = 'Пример 2', value = f'`{settings["prefix"]}реакция очистить 824428281104564264 :thumbsup:`\n┗ Очистит в сообщение с заданным айди определнные реакции :thumbsup:.', inline = False)
             emb.add_field(name = 'Пример 3', value = f'`{settings["prefix"]}реакция очистить_все 824428281104564264`\n┗ Очистит в сообщение с заданным айди абсолютно все реакции.', inline = False)
