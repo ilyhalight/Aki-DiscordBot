@@ -14,4 +14,4 @@ if save_logs is True:
         pass
     else:
         os.mkdir('./logs')
-        logger.add('./logs/logs.log', format = '{time} | {level} | {message}', rotation = '06:00', compression = 'zip')
+    logger.add('./logs/logs.log', format = '{time} | {level} | {message}', rotation = '06:00', compression = 'zip')
