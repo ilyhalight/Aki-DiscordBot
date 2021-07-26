@@ -3,21 +3,17 @@ import time
 import psutil as ps
 import platform
 import distro
-import os
-import sys
 
 from discord.ext import commands
 
 from core.bot import avatar
-from data.colors import colors
 from core.logger import logger
-
+from data.colors import colors
+from scripts.checks import is_windows, is_mac
 
 
 start_time = time.time()
-IS_WINDOWS = os.name == 'nt'
-IS_MAC = sys.platform == 'darwin'
-IS_LINUX = sys.platform == 'linux'
+
 def bytes2Human(number, typer = None): # Thanks Fsoky community
         # Пример Работы Этой Функции перевода чисел:
         # >> bytes2Human(10000)
@@ -48,7 +44,7 @@ class Resource(commands.Cog):
         self.bot = bot
 
     @commands.command(aliases = [
-                                'resources', 'resource', 'bot_resources', 'bot_resource',
+                                'resources', 'resource', 'bot_resources', 'bot_resource', 'res',
                                 'загруженность', 'загруженностьбота', 'загруженность_бота', 'ресурсы', 'ресурсыбота', 'ресурсы_бота', 'потребление', 'потребление_ресурсов', 'потреблениересурсов'])
     async def resource_command(self, ctx):
         mem = ps.virtual_memory()
@@ -72,10 +68,10 @@ class Resource(commands.Cog):
         else:
             msg = f"**{days_up}** дн. **{hours_up}** час. **{minutes_up}** мин. **{time_up}** сек. назад"
 
-        if IS_WINDOWS:
+        if is_windows:
             os_info = platform.uname()
             os_version = f'{os_info.system} {os_info.release}'
-        elif IS_MAC:
+        elif is_mac:
             os_info = platform.mac_ver()
             os_version = f'Mac OS X {os_info[0]} {os_info[2]}'
         else:
