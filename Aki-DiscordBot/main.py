@@ -50,10 +50,13 @@ def run():
         sys.exit(3)
 
 clear()
-for file in os.listdir('./cogs'):
-    if is_python_file(file):
-        bot.load_extension(f'cogs.{file[:-3]}')
-        logger.success(f'Ког "{file[:-3]}" загружен - Пользователь: SYSTEM.')
+try:
+    for file in os.listdir('./cogs'):
+        if is_python_file(file):
+            bot.load_extension(f'cogs.{file[:-3]}')
+            logger.success(f'Ког "{file[:-3]}" загружен - Пользователь: SYSTEM.')
+except:
+    logger.error(f'Не удалось загрузить коги - Пользователь: SYSTEM.')
 
 
 if __name__ == '__main__':
