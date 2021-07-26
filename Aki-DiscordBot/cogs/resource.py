@@ -12,6 +12,7 @@ from data.colors import colors
 from scripts.checks import is_windows, is_mac
 
 
+
 start_time = time.time()
 
 def bytes2Human(number, typer = None): # Thanks Fsoky community
@@ -24,8 +25,7 @@ def bytes2Human(number, typer = None): # Thanks Fsoky community
         if typer == "system":
             symbols = ('KБ', 'МБ', 'ГБ', 'TБ', 'ПБ', 'ЭБ', 'ЗБ', 'ИБ')  # Для перевода в Килобайты, Мегабайты, Гигобайты, Террабайты, Петабайты, Петабайты, Эксабайты, Зеттабайты, Йоттабайты
         else:
-            symbols = ('K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y')  # Для перевода в обычные цифры (10k, 10MM)
-
+            symbols = ('K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y')
         prefix = {}
 
         for i, s in enumerate(symbols):
@@ -37,6 +37,7 @@ def bytes2Human(number, typer = None): # Thanks Fsoky community
                 return '%.1f%s' % (value, s)
 
         return f"{number}B"
+
 class Resource(commands.Cog):
     """Shows system information about the bot"""
 
@@ -87,7 +88,7 @@ class Resource(commands.Cog):
         emb.set_footer(text = 'Aki © 2021 Все права защищены', icon_url = avatar(self.bot.user))
         emb.set_thumbnail(url = avatar(self.bot.user))
         await ctx.send(embed = emb)
-        logger.info(f'Информация о загруженности боте - Пользователь: {ctx.author} ({ctx.author.id}).')
+        logger.info(f'Информация о загруженности бота - Пользователь: {ctx.author} ({ctx.author.id}).')
 
 def setup(bot):
     bot.add_cog(Resource(bot))
