@@ -8,9 +8,10 @@ from core.bot import bot
 from core.cogs import init_commands
 from core.events import init_events
 from core.logger import logger
+from scripts.backup import create_backup
 from scripts.checks import is_python_file
 from scripts.console import clear
-
+from scripts.parsers.settings import settings
 
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
@@ -32,7 +33,11 @@ def run():
         init_events()
     except:
         logger.error('Не удалось инициализировать ивенты - Пользователь: SYSTEM.')
-
+    if settings['backup'] is True:
+        try:
+            create_backup()
+        except:
+            logger.error('Не удалось создать бэкап - Пользователь: SYSTEM')
     try:
         bot.run(os.environ.get('DISCORD_TOKEN'))
     except discord.LoginFailure:
