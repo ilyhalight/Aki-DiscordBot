@@ -1,6 +1,3 @@
-
-logs/
-
 # Editor
 .vscode
 
@@ -22,6 +19,8 @@ eggs/
 .eggs/
 lib/
 lib64/
+logs/
+backups/
 parts/
 sdist/
 var/
