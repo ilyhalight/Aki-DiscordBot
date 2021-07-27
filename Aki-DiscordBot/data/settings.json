@@ -3,5 +3,6 @@
     "debug": false,
     "save_logs": false,
     "full_logs": false,
+    "time_format": "%Y.%m.%d %H.%M.%S",
     "prefix": "$"
 }
