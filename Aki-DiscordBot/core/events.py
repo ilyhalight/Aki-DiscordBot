@@ -15,6 +15,6 @@ def init_events():
                 await bot.change_presence(status = status['status'], activity = discord.Activity(name = status['text'], url = status['link'], type = status['active']))
             else:
                 await bot.change_presence(status = status['status'], activity = discord.Activity(name = status['text'], type = status['active']))
-            logger.success('Статус бота изменен - Пользователь: SYSTEM')
+            logger.success('Статус бота изменен - Пользователь: SYSTEM.')
         else:
             pass
