@@ -4,7 +4,7 @@ import datetime
 from discord.ext import commands
 
 from data.colors import colors
-from core.bot import user_avatar
+from core.bot import avatar
 
 class Channelinfo(commands.Cog):
     """Показывает информацию о канале"""
@@ -19,25 +19,37 @@ class Channelinfo(commands.Cog):
     async def channel_info_command(self, ctx):
         channel = ctx.message.channel
 
-        is_text = channel.type
-        if is_text == 'text':
-            is_text = 'Текстовый'
+        channel_type = channel.type
+        if channel_type == 'voice':
+            channel_type = 'Голосовой'
+        elif channel_type == 'private':
+            channel_type = 'Приватный'
+        elif channel_type == 'group':
+            channel_type = 'Групповой'
+        elif channel_type == 'category':
+            channel_type = 'Категории'
+        elif channel_type == 'news':
+            channel_type = 'Новостной'
+        elif channel_type == 'store':
+            channel_type = 'Магазин'
+        elif channel_type == 'stage_voice':
+            channel_type = 'Сценический'
         else:
-            is_text = 'Голосовой'
+            channel_type = 'Текстовый'
 
         is_nsfw = channel.is_nsfw()
-        if is_nsfw == 'nswf ':
+        if is_nsfw == True:
             is_nsfw = 'Включен'
         else:
             is_nsfw = 'Выключен'
 
         channel_created_at = channel.created_at.strftime("%d.%m.%Y, %H:%M:%S UTC")
         emb = discord.Embed(title = f'Информация о канале {channel.name}', color = colors['help'])
-        emb.add_field(name = 'Тип', value = is_text, inline = True)
+        emb.add_field(name = 'Тип', value = channel_type, inline = True)
         emb.add_field(name = 'Позиция в категории', value = channel.position, inline = True)
         emb.add_field(name = 'Айди канала', value = channel.id, inline = False)
         emb.add_field(name = 'NSFW', value = is_nsfw, inline = False)
-        emb.set_footer(text = f'Канал создан: {channel_created_at}', icon_url = user_avatar(self.bot.user))
+        emb.set_footer(text = f'Канал создан: {channel_created_at}', icon_url = avatar(self.bot.user))
         await ctx.send(embed = emb)
 
 def setup(bot):
