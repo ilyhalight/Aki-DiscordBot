@@ -9,7 +9,7 @@ from core.logger import logger
 from data.colors import colors
 from data.info import __version__, __status__
 
-class Bot_info(commands.Cog):
+class Botinfo(commands.Cog):
     """Show bot info"""
 
     def __init__(self, bot):
@@ -32,4 +32,4 @@ class Bot_info(commands.Cog):
         logger.info(f'Информация о Боте - Пользователь: {ctx.author} ({ctx.author.id}).')
 
 def setup(bot):
-    bot.add_cog(Bot_info(bot))
+    bot.add_cog(Botinfo(bot))

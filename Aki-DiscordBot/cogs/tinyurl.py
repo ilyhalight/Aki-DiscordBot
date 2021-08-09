@@ -10,7 +10,7 @@ from scripts.parsers.imgs import imgs
 from scripts.parsers.settings import settings
 
 
-class Tiny_url(commands.Cog):
+class Tinyurl(commands.Cog):
     """Сокращает ссылки"""
 
     def __init__(self, bot):
@@ -42,4 +42,4 @@ class Tiny_url(commands.Cog):
             logger.success(f'Ссылка "{link}" сокращена - Пользователь: {ctx.author} ({ctx.author.id}).')
 
 def setup(bot):
-    bot.add_cog(Tiny_url(bot))
+    bot.add_cog(Tinyurl(bot))
