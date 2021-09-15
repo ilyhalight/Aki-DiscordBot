@@ -1,11 +1,20 @@
 import discord
-import datetime
 
 from discord.ext import commands
 
 from data.colors import colors
 from core.bot import avatar
 
+channels = {
+    'voice': 'Голосовой',
+    'text': 'Текстовый',
+    'private': 'Приватный',
+    'group': 'Групповой',
+    'category': 'Категории',
+    'news': 'Новостной',
+    'store': 'Магазин',
+    'stage_voice': 'Сценический'
+}
 class Channelinfo(commands.Cog):
     """Показывает информацию о канале"""
 
@@ -18,24 +27,7 @@ class Channelinfo(commands.Cog):
                                 ])
     async def channel_info_command(self, ctx):
         channel = ctx.message.channel
-
-        channel_type = channel.type
-        if channel_type == 'voice':
-            channel_type = 'Голосовой'
-        elif channel_type == 'private':
-            channel_type = 'Приватный'
-        elif channel_type == 'group':
-            channel_type = 'Групповой'
-        elif channel_type == 'category':
-            channel_type = 'Категории'
-        elif channel_type == 'news':
-            channel_type = 'Новостной'
-        elif channel_type == 'store':
-            channel_type = 'Магазин'
-        elif channel_type == 'stage_voice':
-            channel_type = 'Сценический'
-        else:
-            channel_type = 'Текстовый'
+        channel_type = channels.get(str(channel.type)) # Сначало преобразуем channel.type в "str", а потом ищем в массиве
 
         is_nsfw = channel.is_nsfw()
         if is_nsfw == True:

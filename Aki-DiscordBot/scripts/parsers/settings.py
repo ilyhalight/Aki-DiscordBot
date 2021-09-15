@@ -1,17 +1,14 @@
 import json
+import sys
+import traceback
 from loguru import logger
-
 
 
 try:
     with open('./data/settings.json', 'r') as settings:
         settings = json.load(settings)
-except:
-    settings = {
-            "backup": False,
-            "debug": False,
-            "save_logs": False,
-            "full_logs": False,
-            "prefix": "$"
-            }
+except FileNotFoundError:
     logger.error(f'Не удалось загрузить settings.json - Пользователь: SYSTEM.')
+    logger.debug(f'Причина ошибки:\n{traceback.format_exc()}')
+    sys.exit(3)
+

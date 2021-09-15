@@ -58,9 +58,9 @@ class Resource(commands.Cog):
         time_up %= 3600
         minutes_up = round(time_up) // 60
         time_up = round(time_up % 60)
-        if days_up == 0 and hours_up == 0 and minutes_up == 0:
+        if not all(days_up, hours_up, minutes_up):
             msg = f"**{time_up}** сек. назад"
-        elif days_up == 0 and hours_up == 0:
+        elif not all(days_up, hours_up):
             msg = f"**{minutes_up}** мин. назад"
         elif days_up == 0:
             msg = f"**{hours_up}** час. назад"

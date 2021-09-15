@@ -1,5 +1,5 @@
 {
-    "backup": false,
+    "backup": true,
     "debug": false,
     "save_logs": false,
     "full_logs": false,

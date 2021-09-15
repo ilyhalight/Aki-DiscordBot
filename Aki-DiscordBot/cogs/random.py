@@ -1,4 +1,5 @@
 from inspect import Arguments
+import traceback
 import discord
 import random
 from discord.ext import commands
@@ -7,7 +8,11 @@ from core.bot import avatar, bot
 from core.logger import logger
 from data.colors import colors
 from scripts.parsers.settings import settings
-from scripts.parsers.imgs import imgs
+try:
+    from scripts.parsers.imgs import imgs
+except ImportError:
+    logger.error('Не удалось загрузить модуль scripts/parsers/imgs.py - Пользователь: SYSTEM.')
+    logger.debug(f'Причина ошибки:\n{traceback.format_exc()}')
 
 
 
@@ -41,7 +46,7 @@ class Random(commands.Cog):
             emb = discord.Embed(description = f'Использованы буквы в {settings["prefix"]}рандом\n (с) <@{ctx.author.id}>', color = colors['error'])
             emb.set_footer(text = 'Aki © 2021 Все права защищены', icon_url = avatar(bot.user))
             emb.set_author(name = 'Ошибка', icon_url = avatar(ctx.author))
-            emb.set_thumbnail(url = imgs['error'])
+            emb.set_thumbnail(url = imgs['error']) # Не будет работать, если нету json с картинками
             await ctx.send(embed = emb)
             logger.error(f'Не удалось использовать команду random  - Причина: Использованы буквы - Пользователь: {ctx.author} ({ctx.author.id}).')
 

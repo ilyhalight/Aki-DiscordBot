@@ -1,10 +1,16 @@
+import traceback
 import discord
 import asyncio
 import random
 
 from discord.ext import commands
+from loguru import logger
 from scripts.parsers.settings import settings
-from scripts.parsers.imgs import imgs
+try:
+    from scripts.parsers.imgs import imgs
+except ImportError:
+    logger.error('Не удалось загрузить модуль scripts/parsers/imgs.py - Пользователь: SYSTEM.')
+    logger.debug(f'Причина ошибки:\n{traceback.format_exc()}')
 from core.bot import bot
 
 intervals = (
@@ -47,7 +53,7 @@ class Giveaway(commands.Cog):
         winners_text = 'Победители'
         top_places = ''
         alternative_time = ''
-        if int(winners) > 0 and giveaway_time != None and text != None: # Если победителей > 0, есть время и есть текст
+        if int(winners) > 0 and all(giveaway_time, text): # Если победителей > 0, есть время и есть текст
             for s in giveaway_time: # Раскладываем переменную giveaway_time на буквы
                 if s.lower() in time_rotation: # Проверяем есть ли в переменной giveaway_time буква совпадающающая со словарём time_rotation
                     intermediate_time = time_rotation[s.lower()] # Если такая буква есть, заносим её в новую переменную
@@ -93,7 +99,7 @@ class Giveaway(commands.Cog):
             emb.add_field(name = 'Пример', value = f'`{settings["prefix"]}розыгрыш 1 1d 1 Место: 1000 рублей`\n┗ Создаст розыгрыш на 1 день для 1 победителя', inline = False)
             emb.add_field(name = 'Примечание', value = f'Время розыгрыша не может бысть указано в месяцах/годах', inline = False)
             emb.set_footer(text = 'Aki © 2021 Все права защищены', icon_url = self.bot.user.avatar_url)
-            emb.set_thumbnail(url = imgs['giveaway'])
+            emb.set_thumbnail(url = imgs['giveaway']) # Не будет работать, если нету json с картинками
             await ctx.send(embed = emb)
 
 def setup(bot):

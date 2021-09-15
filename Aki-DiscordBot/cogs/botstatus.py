@@ -1,13 +1,22 @@
-import json
+import traceback
 import discord
+
 from discord.ext import commands
 
 from core.bot import avatar, is_owner
 from data.colors import colors
 from core.logger import logger
 from scripts.parsers.settings import settings
-from scripts.parsers.imgs import imgs
-from scripts.parsers.status import status, update_status
+try:
+    from scripts.parsers.imgs import imgs
+except ImportError:
+    logger.error('Не удалось загрузить модуль scripts/parsers/imgs.py - Пользователь: SYSTEM.')
+    logger.debug(f'Причина ошибки:\n{traceback.format_exc()}')
+try:
+    from scripts.parsers.status import status, update_status
+except ImportError:
+    logger.error('Не удалось загрузить модуль scripts/parsers/status.py - Пользователь: SYSTEM.')
+    logger.debug(f'Причина ошибки:\n{traceback.format_exc()}')
 
 
 class Botstatus(commands.Cog):
@@ -21,8 +30,8 @@ class Botstatus(commands.Cog):
                                 'ботстатус', 'бот_статус'
                                 ])
     async def botstatus_command(self, ctx, new_status = None, new_active = None, stream_link = None, *, arg = None):
-        if is_owner(ctx.author.id):
-            if new_status is not None and new_active is not None and stream_link is not  None and arg is not None:
+        if is_owner(ctx.author.id) is True:
+            if all((new_active, new_status, stream_link, arg)):
                 if new_status.lower() in ['offline', 'оффлайн', 'оффлаин', 'офлайн', 'офлаин', 'не_в_сети']:
                     new_status = discord.Status.offline
                 elif new_status.lower() in ['idle', 'идле', 'идлэ', 'офлайн', 'офлаин', 'не_активен']:
@@ -43,30 +52,30 @@ class Botstatus(commands.Cog):
 
                 if stream_link.startswith('www.') and new_activity == discord.ActivityType.streaming or stream_link.startswith('http') and new_activity == discord.ActivityType.streaming:
                     await self.bot.change_presence(status = new_status, activity = discord.Activity(name = arg, url = stream_link, type = new_activity))
-                    status['status'] = new_status[0]
-                    status['active'] = new_activity[1]
-                    status['link'] = stream_link
-                    status['text'] = arg
-                    update_status(status)
-                    logger.warning(f'Статус бота изменен - Пользователь: {ctx.author} ({ctx.author.id}).')
-                    logger.info(f'Новый Статус: {new_status}, Активность: {new_activity}, Ссылка: {stream_link}, Текст: {arg}')
+                    try:
+                        status['status'] = new_status[0]
+                        status['active'] = new_activity[1]
+                        status['link'] = stream_link
+                        status['text'] = arg
+                        update_status(status)
+                        logger.warning(f'Статус бота изменен - Пользователь: {ctx.author} ({ctx.author.id}).')
+                        logger.info(f'Новый Статус: {new_status}, Активность: {new_activity}, Ссылка: {stream_link}, Текст: {arg}')
+                    except NameError:
+                        logger.error(f'Модуль scripts/parsers/status.py не загружен - Пользователь: {ctx.author} ({ctx.author.id}).')
+                        logger.debug(f'Причина ошибки:\n{traceback.format_exc()}')
                 else:
                     await self.bot.change_presence(status = new_status, activity = discord.Activity(name = arg, type = new_activity))
-                    print(status['status'])
-                    print(status['active'])
-                    print(new_status)
-                    print(new_activity)
-                    status['status'] = new_status[0]
-                    status['active'] = new_activity[1]
-                    status['link'] = stream_link
-                    status['text'] = arg
-                    update_status(status)
-                    print(status['status'])
-                    print(status['active'])
-                    print(status['link'])
-                    print(status['text'])
-                    logger.warning(f'Статус бота изменен - Пользователь: {ctx.author} ({ctx.author.id}).')
-                    logger.info(f'Новый Статус: {new_status}, Активность: {new_activity}, Ссылка: {stream_link}, Текст: {arg}')
+                    try:
+                        status['status'] = new_status[0]
+                        status['active'] = new_activity[1]
+                        status['link'] = stream_link
+                        status['text'] = arg
+                        update_status(status)
+                        logger.warning(f'Статус бота изменен - Пользователь: {ctx.author} ({ctx.author.id}).')
+                        logger.info(f'Новый Статус: {new_status}, Активность: {new_activity}, Ссылка: {stream_link}, Текст: {arg}')
+                    except NameError:
+                        logger.error(f'Модуль scripts/parsers/status.py не загружен - Пользователь: {ctx.author} ({ctx.author.id}).')
+                        logger.debug(f'Причина ошибки:\n{traceback.format_exc()}')
             else:
                 emb = discord.Embed(title = 'Помощник - Бот статус', color = colors['help'])
                 emb.add_field(name = 'Использование', value = f'`{settings["prefix"]}бот_статус <статус> <активность> <ссылка> <текст>`', inline = False)
@@ -78,11 +87,20 @@ class Botstatus(commands.Cog):
                 emb.set_thumbnail(url = avatar(self.bot.user))
                 await ctx.send(embed = emb)
                 logger.info(f'Информация о "бот_статус" - Пользователь: {ctx.author} ({ctx.author.id}).')
+        elif is_owner(ctx.author.id) == 'Команда отключена из-за ошибки.':
+            emb = discord.Embed(description = f'Команда отключена из-за ошибки\n (с) <@{ctx.author.id}>', color = colors['error'])
+            emb.set_footer(text = 'Aki © 2021 Все права защищены', icon_url = avatar(self.bot.user))
+            emb.set_author(name = 'Упс-с', icon_url = avatar(ctx.author))
+            if imgs:
+                emb.set_thumbnail(url = imgs['not_available'])
+            await ctx.send(embed = emb)
+            logger.error(f'Не удалось изменить статус - Причина: Команда отключена из-за ошибки - Пользователь: {ctx.author} ({ctx.author.id}).')
         else:
             emb = discord.Embed(description = f'Недостаточно прав\n (с) <@{ctx.author.id}>', color = colors['error'])
             emb.set_footer(text = 'Aki © 2021 Все права защищены', icon_url = avatar(self.bot.user))
             emb.set_author(name = 'Ошибка', icon_url = avatar(ctx.author))
-            emb.set_thumbnail(url = imgs['no_permissions'])
+            if imgs:
+                emb.set_thumbnail(url = imgs['no_permissions'])
             await ctx.send(embed = emb)
             logger.error(f'Не удалось изменить статус - Причина: Недостаточно прав - Пользователь: {ctx.author} ({ctx.author.id}).')
 
