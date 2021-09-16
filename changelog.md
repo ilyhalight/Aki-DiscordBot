@@ -1,4 +1,14 @@
 ## Beta v. 0.3.1
+- Добавлен ког курсов валюты (cogs/currency.py)
+- Добавлен ког курсов криптовалюты (cogs/cryptocurrency.py)
+- Добавлен data/links.json для хранения разных ссылок
+- Добавлен парсер для data/links.json (scripts/parsers/links.py)
+- Добавлен парсер курса валюты (scripts/parsers/currency.py)
+- Добавлен парсер курса криптовалюты (scripts/parsers/cryptocurrency.py)
+- Другие правки
+
+
+## Beta v. 0.3.1
 - В некоторых файлах исправлен импорт неверного логгера
 - Информация о версии и статусе бота перенесена из __init__.py в info.json
 - Был удален __init__.py
