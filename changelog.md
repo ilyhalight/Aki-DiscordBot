@@ -1,4 +1,4 @@
-## Beta v. 0.3.1
+## Beta v. 0.3.2
 - Добавлен ког курсов валюты (cogs/currency.py)
 - Добавлен ког курсов криптовалюты (cogs/cryptocurrency.py)
 - Добавлен data/links.json для хранения разных ссылок
