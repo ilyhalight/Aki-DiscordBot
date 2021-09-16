@@ -1,4 +1,5 @@
 import os
+import traceback
 from zipfile import ZipFile
 
 from core.logger import logger

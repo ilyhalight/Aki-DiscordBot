@@ -1,0 +1,21 @@
+{
+    "cbr": {
+        "url": "https://www.cbr.ru/key-indicators/",
+        "find": "value td-w-4 _bold _end mono-num"
+    },
+    "cryptonator": {
+        "url": "https://api.cryptonator.com/api/ticker/",
+        "currency": "rur",
+        "coins": [
+            "btc",
+            "eth",
+            "ada",
+            "bnb",
+            "usdt",
+            "xrp",
+            "zec",
+            "dash",
+            "ltc"
+        ]
+    }
+}
