@@ -18,7 +18,7 @@ except ImportError:
 from data.colors import colors
 
 class BotInfo(commands.Cog):
-    """Show bot info"""
+    """Показывает информацию о боте"""
 
     def __init__(self, bot):
         self.bot = bot
@@ -34,7 +34,7 @@ class BotInfo(commands.Cog):
             emb.add_field(name = f'<:license:868473632035340349>Лицензия:', value = '⠀⠀MIT License', inline = True)
             emb.add_field(name = f'<:status:868474272950128650>Статус:', value = f'⠀⠀{info["status"]}', inline = True)
             emb.add_field(name = f'<:version:868474836568145940>Версия:', value = f'⠀⠀{info["version"]}', inline = True)
-            emb.add_field(name = f'<:github:868478604365922314>GitHub:', value = f'⠀⠀[Тык](https://github.com/ilyhalight)', inline = True)
+            emb.add_field(name = f'<:github:868478604365922314>GitHub:', value = f'⠀⠀[Тык](https://github.com/ilyhalight/Aki-DiscordBot)', inline = True)
             emb.set_thumbnail(url = avatar(self.bot.user))
             emb.set_footer(text = 'Aki © 2021 Все права защищены', icon_url = avatar(self.bot.user))
             await ctx.send(embed = emb)
