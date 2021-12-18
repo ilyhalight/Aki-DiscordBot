@@ -1,6 +1,7 @@
 import discord
 import requests
 import math
+
 from scripts.parsers.links import links
 
 
