@@ -1,3 +1,7 @@
+## Beta v. 0.3.3
+- Добавлен ког выдачи полного доступа (cogs/disabled/full_access.py)
+
+
 ## Beta v. 0.3.2
 - Добавлен ког курсов валюты (cogs/currency.py)
 - Добавлен ког курсов криптовалюты (cogs/cryptocurrency.py)
