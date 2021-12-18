@@ -15,7 +15,7 @@ except ImportError:
 from scripts.parsers.settings import settings
 
 
-class Tinyurl(commands.Cog):
+class TinyUrl(commands.Cog):
     """Сокращает ссылки"""
 
     def __init__(self, bot):
@@ -49,4 +49,4 @@ class Tinyurl(commands.Cog):
             logger.success(f'Ссылка "{link}" сокращена - Пользователь: {ctx.author} ({ctx.author.id}).')
 
 def setup(bot):
-    bot.add_cog(Tinyurl(bot))
+    bot.add_cog(TinyUrl(bot))

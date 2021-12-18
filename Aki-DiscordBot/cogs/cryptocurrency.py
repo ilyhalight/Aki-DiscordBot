@@ -10,7 +10,7 @@ from scripts.parsers.cryptocurrency import parse_cryptonator
 from data.colors import colors
 
 
-class Cryptocurrency(commands.Cog):
+class CryptoCurrency(commands.Cog):
     """Курс криптовалюты (btc, eth и т.д) за сегодня"""
 
     def __init__(self, bot):
@@ -29,4 +29,4 @@ class Cryptocurrency(commands.Cog):
         logger.info(f'Выведена информация о курсе криптовалюты на сегодня - Пользователь: {ctx.author} ({ctx.author.id}).')
 
 def setup(bot):
-    bot.add_cog(Cryptocurrency(bot))
+    bot.add_cog(CryptoCurrency(bot))

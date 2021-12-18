@@ -19,7 +19,7 @@ except ImportError:
     logger.debug(f'Причина ошибки:\n{traceback.format_exc()}')
 
 
-class Botstatus(commands.Cog):
+class BotStatus(commands.Cog):
     """Изменяет статус бота"""
 
     def __init__(self, bot):
@@ -105,4 +105,4 @@ class Botstatus(commands.Cog):
             logger.error(f'Не удалось изменить статус - Причина: Недостаточно прав - Пользователь: {ctx.author} ({ctx.author.id}).')
 
 def setup(bot):
-    bot.add_cog(Botstatus(bot))
+    bot.add_cog(BotStatus(bot))

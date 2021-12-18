@@ -15,7 +15,7 @@ channels = {
     'store': 'Магазин',
     'stage_voice': 'Сценический'
 }
-class Channelinfo(commands.Cog):
+class ChannelInfo(commands.Cog):
     """Показывает информацию о канале"""
 
     def __init__(self, bot):
@@ -45,4 +45,4 @@ class Channelinfo(commands.Cog):
         await ctx.send(embed = emb)
 
 def setup(bot):
-    bot.add_cog(Channelinfo(bot))
+    bot.add_cog(ChannelInfo(bot))

@@ -17,7 +17,7 @@ except ImportError:
     logger.debug(f'Причина ошибки:\n{traceback.format_exc()}')
 from data.colors import colors
 
-class Botinfo(commands.Cog):
+class BotInfo(commands.Cog):
     """Show bot info"""
 
     def __init__(self, bot):
@@ -44,4 +44,4 @@ class Botinfo(commands.Cog):
             logger.error(f'Модуль scripts/parsers/owner.py или scripts/parsers/info.py не загружен - Пользователь: {ctx.author} ({ctx.author.id}).')
             logger.debug(f'Причина ошибки:\n{traceback.format_exc()}')
 def setup(bot):
-    bot.add_cog(Botinfo(bot))
+    bot.add_cog(BotInfo(bot))
