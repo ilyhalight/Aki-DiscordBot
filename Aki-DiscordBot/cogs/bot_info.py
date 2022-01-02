@@ -36,7 +36,7 @@ class BotInfo(commands.Cog):
             emb.add_field(name = f'<:version:868474836568145940>Версия:', value = f'⠀⠀{info["version"]}', inline = True)
             emb.add_field(name = f'<:github:868478604365922314>GitHub:', value = f'⠀⠀[Тык](https://github.com/ilyhalight/Aki-DiscordBot)', inline = True)
             emb.set_thumbnail(url = avatar(self.bot.user))
-            emb.set_footer(text = 'Aki © 2021 Все права защищены', icon_url = avatar(self.bot.user))
+            emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = avatar(self.bot.user))
             await ctx.send(embed = emb)
             logger.info(f'Информация о Боте - Пользователь: {ctx.author} ({ctx.author.id}).')
         except NameError:

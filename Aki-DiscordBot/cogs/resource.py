@@ -85,7 +85,7 @@ class Resource(commands.Cog):
         emb.add_field(name = '<:ping:868489884023787580>PING', value = f'⠀⠀{ping * 1000:.0f}ms\n', inline = True)
         emb.add_field(name = '<:os:868494322415312926>OS:', value = f'⠀⠀{os_version}', inline = True)
         emb.add_field(name = '<:start:868490519410511902>LAUNCH:', value = f'⠀⠀{msg}', inline = True)
-        emb.set_footer(text = 'Aki © 2021 Все права защищены', icon_url = avatar(self.bot.user))
+        emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = avatar(self.bot.user))
         emb.set_thumbnail(url = avatar(self.bot.user))
         await ctx.send(embed = emb)
         logger.info(f'Информация о загруженности бота - Пользователь: {ctx.author} ({ctx.author.id}).')

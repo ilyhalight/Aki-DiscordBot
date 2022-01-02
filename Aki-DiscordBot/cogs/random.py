@@ -29,7 +29,7 @@ class Random(commands.Cog):
             emb.add_field(name = 'Использование', value = f'`{settings["prefix"]}рандом <число 1> [число 2]`', inline = False)
             emb.add_field(name = 'Пример 1', value = f'`{settings["prefix"]}рандом 5`\n┗ Вернёт рандомное число от 1 до 5.', inline = False)
             emb.add_field(name = 'Пример 2', value = f'`{settings["prefix"]}рандом 5 10`\n┗ Вернёт рандомное число от 5 до 10.', inline = False)
-            emb.set_footer(text = 'Aki © 2021 Все права защищены', icon_url = avatar(self.bot.user))
+            emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = avatar(self.bot.user))
             emb.set_thumbnail(url = avatar(self.bot.user))
             await ctx.send(embed = emb)
             logger.info(f'Информация о "рандом" - Пользователь: {ctx.author} ({ctx.author.id}).')
@@ -44,7 +44,7 @@ class Random(commands.Cog):
     async def random_command_error(self, ctx, error):
         if isinstance (error, commands.BadArgument):
             emb = discord.Embed(description = f'Использованы буквы в {settings["prefix"]}рандом\n (с) <@{ctx.author.id}>', color = colors['error'])
-            emb.set_footer(text = 'Aki © 2021 Все права защищены', icon_url = avatar(bot.user))
+            emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = avatar(bot.user))
             emb.set_author(name = 'Ошибка', icon_url = avatar(ctx.author))
             emb.set_thumbnail(url = imgs['error']) # Не будет работать, если нету json с картинками
             await ctx.send(embed = emb)

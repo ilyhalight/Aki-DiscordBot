@@ -15,7 +15,7 @@ crypto_emoji = {
     'xrp': '<:xrp:888036807885848616>',
     'zec': '<:zec:888036826797985813>',
     'dash': '<:dash:888036840936996874>',
-    'ltc': '<:ltc:888036851523420210>'
+    'ltc': '<:ltc:888036851523420220>'
 }
 
 def parse_cryptonator(emb: discord.Embed):

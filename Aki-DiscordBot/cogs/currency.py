@@ -25,7 +25,7 @@ class Currency(commands.Cog):
         emb = discord.Embed(title = f'Курс валюты за {datetime.now(pytz.timezone("Europe/Moscow")).strftime("%d.%m.%Y")}', color = colors['help'])
         emb.add_field(name = '<:usd:887785459701415966>USD', value = f'{rate[0]} ₽', inline = True)
         emb.add_field(name = '<:euro:887784610476490805>EUR', value = f'{rate[1]} ₽', inline = True)
-        emb.set_footer(text = 'Aki © 2021 Все права защищены', icon_url = avatar(self.bot.user))
+        emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = avatar(self.bot.user))
         emb.set_thumbnail(url = avatar(self.bot.user))
         await ctx.send(embed = emb)
         logger.info(f'Выведена информация о курсе валюты на сегодня - Пользователь: {ctx.author} ({ctx.author.id}).')

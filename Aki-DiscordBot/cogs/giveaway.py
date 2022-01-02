@@ -98,7 +98,7 @@ class Giveaway(commands.Cog):
             emb.add_field(name = 'Использование', value = f'`{settings["prefix"]}розыгрыш <кол-во победителей> <время> <тест>`\n┗ Создаст розыгрыш от вашего лица на определенное время.', inline = False)
             emb.add_field(name = 'Пример', value = f'`{settings["prefix"]}розыгрыш 1 1d 1 Место: 1000 рублей`\n┗ Создаст розыгрыш на 1 день для 1 победителя', inline = False)
             emb.add_field(name = 'Примечание', value = f'Время розыгрыша не может бысть указано в месяцах/годах', inline = False)
-            emb.set_footer(text = 'Aki © 2021 Все права защищены', icon_url = self.bot.user.avatar_url)
+            emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
             emb.set_thumbnail(url = imgs['giveaway']) # Не будет работать, если нету json с картинками
             await ctx.send(embed = emb)
 

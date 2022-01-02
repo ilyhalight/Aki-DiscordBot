@@ -83,13 +83,13 @@ class BotStatus(commands.Cog):
                 emb.add_field(name = 'Пример 2', value = f'`{settings["prefix"]}бот_статус идле стримит https://www.twitch.tv/bratishkinoff $help - осн.комманды`\n┗ Сменит статус бота на идле, активность на стримит, а текст на "$help - осн.комманды".', inline = False)
                 emb.add_field(name = 'Статусы', value = f'Онлайн, оффлайн, идле, не_беспокоить, невидимка', inline = False)
                 emb.add_field(name = 'Активность', value = f'Онлайн, оффлайн, идле, не_беспокоить, невидимка', inline = False)
-                emb.set_footer(text = 'Aki © 2021 Все права защищены', icon_url = avatar(self.bot.user))
+                emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = avatar(self.bot.user))
                 emb.set_thumbnail(url = avatar(self.bot.user))
                 await ctx.send(embed = emb)
                 logger.info(f'Информация о "бот_статус" - Пользователь: {ctx.author} ({ctx.author.id}).')
         elif is_owner(ctx.author.id) == 'Команда отключена из-за ошибки.':
             emb = discord.Embed(description = f'Команда отключена из-за ошибки\n (с) <@{ctx.author.id}>', color = colors['error'])
-            emb.set_footer(text = 'Aki © 2021 Все права защищены', icon_url = avatar(self.bot.user))
+            emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = avatar(self.bot.user))
             emb.set_author(name = 'Упс-с', icon_url = avatar(ctx.author))
             if imgs:
                 emb.set_thumbnail(url = imgs['not_available'])
@@ -97,7 +97,7 @@ class BotStatus(commands.Cog):
             logger.error(f'Не удалось изменить статус - Причина: Команда отключена из-за ошибки - Пользователь: {ctx.author} ({ctx.author.id}).')
         else:
             emb = discord.Embed(description = f'Недостаточно прав\n (с) <@{ctx.author.id}>', color = colors['error'])
-            emb.set_footer(text = 'Aki © 2021 Все права защищены', icon_url = avatar(self.bot.user))
+            emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = avatar(self.bot.user))
             emb.set_author(name = 'Ошибка', icon_url = avatar(ctx.author))
             if imgs:
                 emb.set_thumbnail(url = imgs['no_permissions'])

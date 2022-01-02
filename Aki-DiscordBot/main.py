@@ -3,7 +3,6 @@ import sys
 import discord
 import aiohttp
 import traceback
-from dotenv import load_dotenv
 
 from core.bot import bot
 from core.cogs import init_commands
@@ -11,15 +10,8 @@ from core.events import init_events
 from core.logger import logger
 from scripts.backup import create_backup
 from scripts.checks import is_python_file
+from scripts.env import get_env
 from scripts.parsers.settings import settings
-
-
-dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
-
-
-def do_env():
-    if os.path.exists(dotenv_path):
-        load_dotenv(dotenv_path)
 
 
 def run():
@@ -27,31 +19,37 @@ def run():
         init_commands()
     except:
         logger.error('Не удалось инициализировать управление когами - Пользователь: SYSTEM.')
+        logger.debug(f'Причина ошибки:\n{traceback.format_exc()}')
     try:
         init_events()
     except:
         logger.error('Не удалось инициализировать ивенты - Пользователь: SYSTEM.')
+        logger.debug(f'Причина ошибки:\n{traceback.format_exc()}')
     if settings['backup'] is True:
         try:
             create_backup()
         except:
             logger.error('Не удалось создать бэкап - Пользователь: SYSTEM')
+            logger.debug(f'Причина ошибки:\n{traceback.format_exc()}')
     try:
         bot.run(os.environ.get('DISCORD_TOKEN'))
     except discord.LoginFailure:
         logger.critical('Этот токен недействителен')
+        logger.debug(f'Причина ошибки:\n{traceback.format_exc()}')
         sys.exit(3)
     except discord.PrivilegedIntentsRequired:
         logger.critical(
             'Необходимо, чтобы были включены все привилегии.\n'
             'Перейдите на https://discord.com/developers/applications/ и включите привилегии'
         )
+        logger.debug(f'Причина ошибки:\n{traceback.format_exc()}')
         sys.exit(3)
     except aiohttp.ClientConnectorError:
         logger.critical(
             'Вероятно discord.com сейчас недоступен.\n'
             'Перейдите на https://discordstatus.com/ и лично проверьте статус сервисов'
         )
+        logger.debug(f'Причина ошибки:\n{traceback.format_exc()}')
         sys.exit(3)
     except AttributeError:
         logger.error(f'Не удалось найти ".env" файл - Пользователь: SYSTEM.')
@@ -69,6 +67,6 @@ except FileNotFoundError:
 
 
 if __name__ == '__main__':
-    do_env()
+    get_env()
     run()
 

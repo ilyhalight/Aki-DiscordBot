@@ -31,7 +31,7 @@ class TinyUrl(commands.Cog):
             emb.add_field(name = 'Использование', value = f'`{settings["prefix"]}тюрл <ссылка>`', inline = False)
             emb.add_field(name = 'Пример 1', value = f'`{settings["prefix"]}тюрл https://www.youtube.com`\n┗ Вернёт сокращенную ссылку для сайта "https://www.youtube.com".', inline = False)
             emb.add_field(name = 'Пример 2', value = f'`{settings["prefix"]}тюрл discord.com`\n┗ Вернёт сокращенную ссылку для сайта "https://discord.com".', inline = False)
-            emb.set_footer(text = 'Aki © 2021 Все права защищены', icon_url = avatar(self.bot.user))
+            emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = avatar(self.bot.user))
             if imgs:
                 emb.set_thumbnail(url = imgs['tinyurl'])
             await ctx.send(embed = emb)
@@ -41,7 +41,7 @@ class TinyUrl(commands.Cog):
             emb = discord.Embed(title = '', color = colors['help'])
             emb.add_field(name = ':link:Первоначальная ссылка', value = f'⠀⠀{link}', inline = False)
             emb.add_field(name = ':link:Сокращенная ссылка', value = f'⠀⠀{short_link}', inline = False)
-            emb.set_footer(text = 'Aki © 2021 Все права защищены', icon_url = avatar(self.bot.user))
+            emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = avatar(self.bot.user))
             emb.set_author(name = 'Ссылка успешно сокращена')
             if imgs:
                 emb.set_thumbnail(url = imgs['tinyurl'])

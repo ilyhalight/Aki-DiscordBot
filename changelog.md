@@ -1,3 +1,27 @@
+## Beta v0.3.4
+- Добавлено подключение к базе данных MySQL
+- Получение информации из `.env` вынесено в отдельных файл
+Новый вид файла `.env`:
+```
+    DISCORD_TOKEN=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    DB_USER=root
+    DB_PASSWORD=root
+    DB_HOST=127.0.0.1
+    DB_NAME=aki_discord
+    DB_CSGO_USER=root
+    DB_CSGO_PASSWORD=root
+    DB_CSGO_HOST=127.0.0.1
+    DB_CSGO_NAME=aki_csgo
+```
+- Добавил пример `.env` файла (.example.env)
+- Переименовал классы когов. Теперь, все классы начинаются с большой буквы
+- Переименовал файлы проекта. Теперь, название файлов намного легче прочитать
+- Добавлен ког, позволяющий выдавать привилегии на сервере CS:GO (cogs/csgo_give_privillege.py)
+- Добавлена инструкция по установке в README.md
+- Copyright 2021 изменён на Copyright 2022 (самое важное изменение xD)
+- Некоторые другие, не значительные изменения
+
+
 ## Beta v. 0.3.3
 - Добавлен ког выдачи полного доступа (cogs/disabled/full_access.py)
 

@@ -41,7 +41,7 @@ class Reactions(commands.Cog):
             emb.add_field(name = 'Пример 1', value = f'`{settings["prefix"]}реакция добавить 824428281104564264 :thumbsup:`\n┗ Добавит к сообщению с заданным айди реакцию :thumbsup:.', inline = False)
             emb.add_field(name = 'Пример 2', value = f'`{settings["prefix"]}реакция очистить 824428281104564264 :thumbsup:`\n┗ Очистит в сообщение с заданным айди определнные реакции :thumbsup:.', inline = False)
             emb.add_field(name = 'Пример 3', value = f'`{settings["prefix"]}реакция очистить_все 824428281104564264`\n┗ Очистит в сообщение с заданным айди абсолютно все реакции.', inline = False)
-            emb.set_footer(text = 'Aki © 2021 Все права защищены', icon_url = avatar(self.bot.user))
+            emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = avatar(self.bot.user))
             emb.set_thumbnail(url = avatar(self.bot.user))
             await ctx.send(embed = emb)
             logger.info(f'Информация о "реакция" - Пользователь: {ctx.author} ({ctx.author.id}).')
