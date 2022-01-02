@@ -1,3 +1,24 @@
+## Beta v0.3.5
+- Добавлен ког sb_bans, которые позволяет банить игроков Source игр, используя SourceBans, но мне результат не очень понравился, ибо может банить только тех, кто ещё не был забанен. Я попытался это исправить, но не получилось. Удалять не буду, т.к. мне жалко моё потраченное время, может быть он кому-то будет полезен.
+- Дополнение к предыдущему изменению. Добавлено отдельное подключение к базе данных SourceBans. Раскоментируйте, если оно вам нужно
+Новый вид файла `.env` для sourcebans (измените, если оно вам нужно):
+```
+    DISCORD_TOKEN=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    DB_USER=root
+    DB_PASSWORD=root
+    DB_HOST=127.0.0.1
+    DB_NAME=aki_discord
+    DB_CSGO_USER=root
+    DB_CSGO_PASSWORD=root
+    DB_CSGO_HOST=127.0.0.1
+    DB_CSGO_NAME=aki_csgo
+    DB_SB_USER=root
+    DB_SB_PASSWORD=root
+    DB_SB_HOST=127.0.0.1
+    DB_SB_NAME=aki_sourcebans
+```
+- Теперь, в коге csgo_give_privillege пишется ошибка в лог и на сервер, если она произошла
+
 ## Beta v0.3.4
 - Добавлено подключение к базе данных MySQL
 - Получение информации из `.env` вынесено в отдельных файл
