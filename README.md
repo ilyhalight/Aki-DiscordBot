@@ -57,6 +57,10 @@ Aki - это модульный бот, в котором большинство
     DB_PASSWORD=root
     DB_HOST=127.0.0.1
     DB_NAME=aki_discord
+    DB_CSGO_USER=root
+    DB_CSGO_PASSWORD=root
+    DB_CSGO_HOST=127.0.0.1
+    DB_CSGO_NAME=aki_csgo
 ```
  # Discord
 
