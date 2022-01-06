@@ -12,20 +12,33 @@ from data.colors import colors
 from scripts.checks import is_windows, is_mac
 
 
+start_time = time.time() # Получаем текущее unix время при запуске бота
 
-start_time = time.time()
+class Resource(commands.Cog):
+    """Показывает информацию о потребление ресурсов ботом"""
 
-def bytes2Human(number, typer = None): # Thanks Fsoky community
-        # Пример Работы Этой Функции перевода чисел:
-        # >> bytes2Human(10000)
-        # >> '9.8K'
-        # >> bytes2Human(100001221)
-        # >> '95.4M'
+    def __init__(self, bot):
+        self.bot = bot
 
-        if typer == "system":
-            symbols = ('KБ', 'МБ', 'ГБ', 'TБ', 'ПБ', 'ЭБ', 'ЗБ', 'ИБ')  # Для перевода в Килобайты, Мегабайты, Гигобайты, Террабайты, Петабайты, Петабайты, Эксабайты, Зеттабайты, Йоттабайты
-        else:
-            symbols = ('K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y')
+    async def bytes_to_human(self, number):
+        """Переводит число из байтов в максимально возможную систему счисления и присваивает её символ
+        Спасибо за логику работы Fsoky Сommunity (Сейчас, Fadager Community) >>> код из осени 2020 года
+
+        Args:
+            number: Число байтов
+
+        Return:
+            value + symbol (str): Возвращает число, в понятной человеку системе счисления - Успех
+            value + Byte (str): Возвращает число, в байтах - Неудача
+
+        Example:
+        >> bytes_to_human(10000)
+        >> '9.8KБ'
+        >> bytes_to_human(100001221)
+        >> '95.4MБ'
+        """
+
+        symbols = ('KБ', 'МБ', 'ГБ', 'TБ', 'ПБ', 'ЭБ', 'ЗБ', 'ИБ') # Название единиц измерения
         prefix = {}
 
         for i, s in enumerate(symbols):
@@ -38,12 +51,6 @@ def bytes2Human(number, typer = None): # Thanks Fsoky community
 
         return f"{number}B"
 
-class Resource(commands.Cog):
-    """Shows system information about the bot"""
-
-    def __init__(self, bot):
-        self.bot = bot
-
     @commands.command(aliases = [
                                 'resources', 'resource', 'bot_resources', 'bot_resource', 'res',
                                 'загруженность', 'загруженностьбота', 'загруженность_бота', 'ресурсы', 'ресурсыбота', 'ресурсы_бота', 'потребление', 'потребление_ресурсов', 'потреблениересурсов'])
@@ -51,23 +58,27 @@ class Resource(commands.Cog):
         mem = ps.virtual_memory()
         ping = self.bot.ws.latency
 
+        mem_used = await self.bytes_to_human(mem.used)
+        mem_total = await self.bytes_to_human(mem.total)
+
         time_up = time.time() - start_time
+        logger.debug(f'Общее время работы бота в секундах: {time_up}')
         days_up = round(time_up) // 86400
         time_up %= 86400
         hours_up = round(time_up) // 3600
         time_up %= 3600
         minutes_up = round(time_up) // 60
         time_up = round(time_up % 60)
-        if not all((days_up, hours_up, minutes_up)):
-            msg = f"**{time_up}** сек. назад"
-        elif not all((days_up, hours_up)):
-            msg = f"**{minutes_up}** мин. назад"
-        elif days_up == 0:
-            msg = f"**{hours_up}** час. назад"
-        elif days_up > 0:
-            msg = f"**{days_up}** дн. назад"
-        else:
+        logger.debug(f'Текущее время работы бота в днях: {days_up}, в часах: {hours_up}, в минутах: {minutes_up}, в секундах: {time_up}')
+
+        if all((days_up, hours_up, minutes_up)):
             msg = f"**{days_up}** дн. **{hours_up}** час. **{minutes_up}** мин. **{time_up}** сек. назад"
+        elif all((hours_up, minutes_up)):
+            msg = f"**{hours_up}** час. **{minutes_up}** мин. **{time_up}** сек. назад"
+        elif minutes_up != 0:
+            msg = f"**{minutes_up}** мин. **{time_up}** сек. назад"
+        else:
+            msg = f"**{time_up}** сек. назад"
 
         if is_windows:
             os_info = platform.uname()
@@ -81,7 +92,7 @@ class Resource(commands.Cog):
 
         emb = discord.Embed(title = 'Потребление ресурсов', color = colors['help'])
         emb.add_field(name = '<:cpu:868488839671476314>CPU', value = f'⠀⠀{ps.cpu_percent()}%', inline = True)
-        emb.add_field(name = '<:ram:868489182383845376>RAM', value = f'⠀⠀{bytes2Human(mem.used, "system")}/{bytes2Human(mem.total, "system")}', inline = True)
+        emb.add_field(name = '<:ram:868489182383845376>RAM', value = f'⠀⠀{mem_used}/{mem_total}', inline = True)
         emb.add_field(name = '<:ping:868489884023787580>PING', value = f'⠀⠀{ping * 1000:.0f}ms\n', inline = True)
         emb.add_field(name = '<:os:868494322415312926>OS:', value = f'⠀⠀{os_version}', inline = True)
         emb.add_field(name = '<:start:868490519410511902>LAUNCH:', value = f'⠀⠀{msg}', inline = True)
