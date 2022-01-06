@@ -1,7 +1,7 @@
 {
     "backup": false,
-    "debug": false,
-    "save_logs": false,
+    "debug": true,
+    "save_logs": true,
     "full_logs": false,
     "time_format": "%Y.%m.%d %H.%M.%S",
     "prefix": "$"
