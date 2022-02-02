@@ -105,6 +105,9 @@
 #     def __init__(self, bot):
 #         self.bot = bot
 
+#     def sb_ban_help(self, prefix, emb: discord.Embed):
+#         return emb.add_field(name = f'{prefix}сб_бан', value = 'Выдать бан в SourceBans', inline = False)
+
 #     @commands.command(aliases = [
 #                                 'sb_ban', 'sourceban_ban', 'sourcebans_ban',
 #                                 'сб_бан', 'соурсбан_бан', 'соурсбанс_бан'
