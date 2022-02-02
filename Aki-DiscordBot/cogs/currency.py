@@ -9,7 +9,10 @@ from core.logger import logger
 from core.bot import avatar
 from scripts.parsers.currency import parse_cbr
 from scripts.parsers.settings import settings
+from scripts.parsers.emojis import emojis
 from data.colors import colors
+
+emoji = emojis['currency']
 
 
 class Currency(commands.Cog):
@@ -34,8 +37,8 @@ class Currency(commands.Cog):
     async def currency_command(self, ctx):
         rate = parse_cbr()
         emb = discord.Embed(title = f'Курс валюты за {datetime.now(pytz.timezone("Europe/Moscow")).strftime("%d.%m.%Y")}', color = colors['help'])
-        emb.add_field(name = '<:usd:887785459701415966>USD', value = f'{rate[0]} ₽', inline = True)
-        emb.add_field(name = '<:euro:887784610476490805>EUR', value = f'{rate[1]} ₽', inline = True)
+        emb.add_field(name = f'{emoji["usd"]}USD', value = f'{rate[0]} ₽', inline = True)
+        emb.add_field(name = f'{emoji["euro"]}EUR', value = f'{rate[1]} ₽', inline = True)
         emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = avatar(self.bot.user))
         emb.set_thumbnail(url = avatar(self.bot.user))
         await ctx.send(embed = emb)
