@@ -1,6 +1,6 @@
 {
     "backup": false,
-    "debug": true,
+    "debug": false,
     "save_logs": true,
     "time_format": "%Y.%m.%d %H.%M.%S",
     "prefix": "$"
