@@ -1,10 +1,10 @@
 import discord
-import time
 
 from datetime import datetime
 from discord.ext import commands
 
 from core.bot import avatar, is_owner
+from core.embeds import Errors, Helpers
 from core.logger import logger
 from data.colors import colors
 from scripts.parsers.steamid import parse_steamid
@@ -38,22 +38,22 @@ class CSGORemovePrivillege(commands.Cog):
             result: False - Fail
         """
         try:
-            logger.debug('Пытаюсь подключиться к БД - Пользователь: SYSTEM.')
+            logger.debug('Пытаюсь подключиться к БД — Запросил пользователь: SYSTEM.')
             db = open_csgo_db_connection() # Открываем соединение с БД
-            logger.debug('Подключение к БД установлено - Пользователь: SYSTEM.')
+            logger.debug('Подключение к БД установлено — Запросил пользователь: SYSTEM.')
             cursor = db.cursor() # Создаем курсор управления БД
-            logger.debug('Курсор управления БД создан - Пользователь: SYSTEM.')
+            logger.debug('Курсор управления БД создан — Запросил пользователь: SYSTEM.')
 
-            logger.debug('Пытаюсь отправить SQL запрос на получение данных из БД - Пользователь: SYSTEM.')
+            logger.debug('Пытаюсь отправить SQL запрос на получение данных из БД — Запросил пользователь: SYSTEM.')
             cursor.execute(f'SELECT * FROM vip_users WHERE account_id={steamid}') # Отправляем SQL запрос
-            logger.debug('Данные из БД были получены - Пользователь: SYSTEM.')
+            logger.debug('Данные из БД были получены — Запросил пользователь: SYSTEM.')
             result = cursor.fetchone() # Получаем первую строку из полученного кортежа
-            logger.debug('Получена первая строка из полученного кортежа - Пользователь: SYSTEM.')
+            logger.debug('Получена первая строка из полученного кортежа — Запросил пользователь: SYSTEM.')
 
             cursor.close()
-            logger.debug('Доступ к курсору был закрыт - Пользователь: SYSTEM.')
+            logger.debug('Доступ к курсору был закрыт — Запросил пользователь: SYSTEM.')
             db.close()
-            logger.debug('Подключение к БД было закрыто - Пользователь: SYSTEM.')
+            logger.debug('Подключение к БД было закрыто — Запросил пользователь: SYSTEM.')
             return result
         except Exception as err:
             logger.error(err)
@@ -70,29 +70,40 @@ class CSGORemovePrivillege(commands.Cog):
             result: None - Fail
         """
         try:
-            logger.debug('Пытаюсь подключиться к БД - Пользователь: SYSTEM.')
+            logger.debug('Пытаюсь подключиться к БД — Запросил пользователь: SYSTEM.')
             db = open_csgo_db_connection() # Открываем соединение с БД
-            logger.debug('Подключение к БД установлено - Пользователь: SYSTEM.')
+            logger.debug('Подключение к БД установлено — Запросил пользователь: SYSTEM.')
             cursor = db.cursor() # Создаем курсор управления БД
-            logger.debug('Курсор управления БД создан - Пользователь: SYSTEM.')
+            logger.debug('Курсор управления БД создан — Запросил пользователь: SYSTEM.')
 
-            logger.debug('Пытаюсь отправить SQL запрос на удаление данных из БД - Пользователь: SYSTEM.')
+            logger.debug('Пытаюсь отправить SQL запрос на удаление данных из БД — Запросил пользователь: SYSTEM.')
             cursor.execute(f'DELETE FROM vip_users WHERE account_id={int(steamid)}') # Отправляем SQL запрос
-            logger.debug('Данные были удалены из БД - Пользователь: SYSTEM.')
+            logger.debug('Данные были удалены из БД — Запросил пользователь: SYSTEM.')
             db.commit() # Сохраняем изменения в базе данных
-            logger.debug('Изменения были сохранены в БД - Пользователь: SYSTEM.')
+            logger.debug('Изменения были сохранены в БД — Запросил пользователь: SYSTEM.')
 
             cursor.close()
-            logger.debug('Доступ к курсору был закрыт - Пользователь: SYSTEM.')
+            logger.debug('Доступ к курсору был закрыт — Запросил пользователь: SYSTEM.')
             db.close()
-            logger.debug('Подключение к БД было закрыто - Пользователь: SYSTEM.')
+            logger.debug('Подключение к БД было закрыто — Запросил пользователь: SYSTEM.')
             return True
         except Exception as err:
             logger.error(err)
             return None
+
+    def csgo_remove_privillege_help(self, prefix, emb: discord.Embed):
+        return emb.add_field(name = f'{prefix}ксго\_удалить\_привилегию', value = 'Забрать привилегию на сервере CS:GO', inline = False)
+
+    async def csgo_remove_privillege_helper(self, ctx):
+        emb = await Helpers.custom_image_embed(self, ctx, self.bot.user.avatar_url, 'server', 'Забрать привилегию CS:GO')
+        emb.add_field(name = 'Использование', value = f'`{settings["prefix"]}ксго_удалить_привилегию <ссылка на стим>`\n┗ Заберёт у игрока привилегию, если она у него есть', inline = False)
+        emb.add_field(name = 'Пример', value = f'`{settings["prefix"]}ксго_удалить_привилегию https://steamcommunity.com/id/ToilOfficial`\n┗ Заберёт у игрока привилегию', inline = False)
+        await ctx.send(embed = emb)
+        logger.info(f'Выведена информация о "Забрать привилегии у игрока в CS:GO" — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
+
     @commands.command(aliases = [
                                 'csgo_remove_privillege', 'cs_remove_privillege',
-                                'ксго_удалить_привилегию', 'кс_удалить_привилегию',
+                                'ксго_удалить_привилегию', 'кс_удалить_привилегию', 'ксго_забрать_привилегию', 'кс_забрать_привилегию'
                                 ])
     async def csgo_remove_privillege_command(self, ctx, steam_link: str):
         """Удаление привилегии на сервере CS:GO
@@ -130,14 +141,10 @@ class CSGORemovePrivillege(commands.Cog):
                         emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
                         emb.set_author(name = datetime.now().strftime(settings['time_format']), icon_url = ctx.author.avatar_url)
                         await ctx.send(embed = emb)
-                        logger.info(f'У игрока {parser[-1]} ("https://steamcommunity.com/id/{parser[0]}") удалена привилегия {data_from_db[4]} (Срок: {data_from_db[5]}) на сервере CS:GO - Пользователь: {ctx.author} ({ctx.author.id}).')
+                        logger.info(f'У игрока {parser[-1]} ("https://steamcommunity.com/id/{parser[0]}") удалена привилегия {data_from_db[4]} (Срок: {data_from_db[5]}) на сервере CS:GO — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
                     else:
-                        emb = discord.Embed(title = f'Не удалось отправить/сохранить данные в БД', color = colors['error'])
-                        emb.set_author(name = 'Ошибка', icon_url = avatar(ctx.author))
-                        emb.set_thumbnail(url = imgs['error'])
-                        emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
-                        await ctx.send(embed = emb)
-                        logger.error(f'Не удалось отправить/сохранить данные в БД, о удалении привилегии у игрока на сервере CS:GO - Пользователь: {ctx.author} ({ctx.author.id}).')
+                        await Errors.custom_msg_embed(self, ctx, 'Не удалось отправить/сохранить данные в БД')
+                        logger.error(f'Не удалось отправить/сохранить данные в БД, о удалении привилегии у игрока на сервере CS:GO — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
 
                 elif data_from_db is not tuple and data_from_db is not False:
                     emb = discord.Embed(title = f'У игрока нет привилегии на сервере CS:GO', color = colors['error'])
@@ -147,52 +154,32 @@ class CSGORemovePrivillege(commands.Cog):
                     emb.set_thumbnail(url = imgs['error'])
                     emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
                     await ctx.send(embed = emb)
-                    logger.info(f'У игрока {parser[-1]} ("https://steamcommunity.com/id/{parser[0]}") нет привилегии на сервере CS:GO - Пользователь: {ctx.author} ({ctx.author.id}).')
+                    logger.info(f'У игрока {parser[-1]} ("https://steamcommunity.com/id/{parser[0]}") нет привилегии на сервере CS:GO — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
 
                 elif data_from_db is False:
-                    emb = discord.Embed(title = f'Не удалось получить данные из БД', color = colors['error'])
-                    emb.set_author(name = 'Ошибка', icon_url = avatar(ctx.author))
-                    emb.set_thumbnail(url = imgs['error'])
-                    emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
-                    await ctx.send(embed = emb)
-                    logger.error(f'Не удалось получить данные из БД - Пользователь: {ctx.author} ({ctx.author.id}).')
+                    await Errors.custom_msg_embed(self, ctx, 'Не удалось получить данные из БД')
+                    logger.error(f'Не удалось получить данные из БД — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
 
                 else:
-                    emb = discord.Embed(title = f'Неизвестная ошибка', color = colors['error'])
-                    emb.set_author(name = 'Ошибка', icon_url = avatar(ctx.author))
-                    emb.set_thumbnail(url = imgs['error'])
-                    emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
-                    await ctx.send(embed = emb)
-                    logger.error(f'Произошла неизвестная ошибка - Пользователь: {ctx.author} ({ctx.author.id}).')
+                    await Errors.custom_msg_embed(self, ctx, 'Неизвестная ошибка')
+                    logger.error(f'Произошла неизвестная ошибка — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
             else:
-                emb = discord.Embed(title = f'Не удалось спарсить данные о стиме игрока', color = colors['error'])
-                emb.set_author(name = 'Ошибка', icon_url = avatar(ctx.author))
-                emb.set_thumbnail(url = imgs['error'])
-                emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
-                await ctx.send(embed = emb)
-                logger.info(f'Не удалось спарсить данные о стиме игрока - Пользователь: {ctx.author} ({ctx.author.id}).')
+                await Errors.custom_msg_embed(self, ctx, 'Не удалось спарсить данные о стиме игрока')
+                logger.info(f'Не удалось спарсить данные о стиме игрока — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
         else:
-            await ctx.send(embed = discord.Embed(title = '`Вы не являетесь моим создателем!`', color = colors['error']))
-            logger.warning(f'Неудачная попытка удалить привилегию на сервере CS:GO - Недостаточно прав - Пользователь: {ctx.author} ({ctx.author.id}).')
+            await Errors.no_permissions_embed(self, ctx)
+            logger.warning(f'Неудачная попытка удалить привилегию на сервере CS:GO - Недостаточно прав— Запросил пользователь: {ctx.author} ({ctx.author.id}).')
+
 
     @csgo_remove_privillege_command.error
     async def csgo_remove_privillege_command_error(self, ctx, error):
         if isinstance(error, commands.errors.MissingRequiredArgument) or isinstance(error, commands.errors.BadArgument):
-            emb = discord.Embed(title = 'Удаление привилегий CS:GO', color = colors['helper'])
-            emb.set_author(name = 'Помощник', icon_url = avatar(ctx.author))
-            emb.add_field(name = 'Использование', value = f'`{settings["prefix"]}ксго_удалить_привилегию <ссылка на стим>`\n┗ Удалит привилегию игрока, если она существует', inline = False)
-            emb.add_field(name = 'Пример', value = f'`{settings["prefix"]}ксго_удалить_привилегию https://steamcommunity.com/id/ToilOfficial`\n┗ Удалит привилегию у игрока', inline = False)
-            emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
-            emb.set_thumbnail(url = imgs['server'])
-            await ctx.send(embed = emb)
-            logger.info(f'Выведена информация о "Удаление привилегии у игрока в CS:GO" - Пользователь: SYSTEM.')
+            await self.csgo_remove_privillege_helper(ctx)
+            logger.info(f'Выведена информация о "Удаление привилегии у игрока в CS:GO" — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
+            logger.error(error)
         else:
-            emb = discord.Embed(title = 'Ошибка удаления привилегии на сервере CS:G', color = colors['error'])
-            emb.set_author(name = 'Ошибка', icon_url = avatar(ctx.author))
-            emb.add_field(name = 'Причина ошибки: ', value = error)
-            emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
-            await ctx.send(embed = emb)
-            logger.error('Ошибка удаления привилегии на сервере CS:GO - Пользователь: SYSTEM.')
+            await Errors.custom_msg_embed(self, ctx, error)
+            logger.error('Ошибка удаления привилегии на сервере CS:GO — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
             logger.error(error)
 def setup(bot):
     bot.add_cog(CSGORemovePrivillege(bot))
