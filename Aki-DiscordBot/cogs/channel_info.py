@@ -103,7 +103,7 @@ class ChannelInfo(commands.Cog):
         emb.add_field(name = f'Тип', value = f'{channel_type_emoji} {channel_type}', inline = True)
         emb.set_footer(text = f'Канал создан: {channel_created_at}', icon_url = avatar(self.bot.user))
         await ctx.send(embed = emb)
-
+        logger.info(f'Выведена информация о канале {channel.id} — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
 
     @channelinfo_command.error
     async def channelinfo_command_error(self, ctx, error):
