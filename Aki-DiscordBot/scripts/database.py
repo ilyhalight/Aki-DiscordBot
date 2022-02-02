@@ -34,16 +34,19 @@ _csgo_config = {
 if mysql.connector.__version_info__ > (2, 1) and mysql.connector.HAVE_CEXT:
     _config['use_pure'] = False
 
+if mysql.connector.__version_info__ > (2, 1) and mysql.connector.HAVE_CEXT:
+    _csgo_config['use_pure'] = False
+
 def open_db_connection():
     try:
         db = mysql.connector.connect(**_config)
         return db
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-            logger.error('Неверное именя пользователя или пароль - Пользователь: SYSTEM.')
+            logger.error('Неверное имя пользователя или пароль — Пользователь: SYSTEM.')
             logger.debug(f'Причина ошибки:\n{traceback.format_exc()}')
         elif err.errno == errorcode.ER_BAD_DB_ERROR:
-            logger.error('База данных не существует - Пользователь: SYSTEM.')
+            logger.error('База данных не существует — Пользователь: SYSTEM.')
             logger.debug(f'Причина ошибки:\n{traceback.format_exc()}')
         else:
             print(err)
@@ -54,10 +57,10 @@ def open_csgo_db_connection():
         return db
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-            logger.error('Неверное именя пользователя или пароль - Пользователь: SYSTEM.')
+            logger.error('Неверное именя пользователя или пароль — Пользователь: SYSTEM.')
             logger.debug(f'Причина ошибки:\n{traceback.format_exc()}')
         elif err.errno == errorcode.ER_BAD_DB_ERROR:
-            logger.error('База данных не существует - Пользователь: SYSTEM.')
+            logger.error('База данных не существует — Пользователь: SYSTEM.')
             logger.debug(f'Причина ошибки:\n{traceback.format_exc()}')
         else:
             print(err)
