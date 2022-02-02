@@ -25,7 +25,7 @@ class Currency(commands.Cog):
         return emb.add_field(name = f'{prefix}курс', value = 'Курс валюты на сегодня', inline = False)
 
     async def cryptocurrency_helper(self, ctx):
-        emb = await Helpers.default_embed(self, ctx, self.bot.user.avatar_url, 'Курс валюты')
+        emb = await Helpers.default_embed(self, ctx, self.bot.user.avatar_url, 'Курс валюты на сегодня')
         emb.add_field(name = 'Использование', value = f'`{settings["prefix"]}курс`\n┗ Выведет информацию о курсах валюты', inline = False)
         await ctx.send(embed = emb)
         logger.info(f'Выведена информация о "Курсе валюты на сегодня" — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
