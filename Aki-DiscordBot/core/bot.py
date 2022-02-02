@@ -1,10 +1,13 @@
+import discord
 from discord.ext import commands
 
 from scripts.parsers.settings import settings
 from scripts.parsers.owner import owner
 
 
-bot = commands.Bot(command_prefix = settings['prefix'], case_insensitive = True)
+intents = discord.Intents.default()
+intents.members = True
+bot = commands.Bot(command_prefix = settings['prefix'], case_insensitive = True, intents = intents)
 bot.remove_command('help') # Удаляем встроенную команду хелп
 
 def cog_values():
