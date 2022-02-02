@@ -40,7 +40,7 @@ class ChannelInfo(commands.Cog):
         logger.info(f'Выведена информация о "Информация о канале" — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
 
     @commands.command(aliases = [
-                                'cinfo', 'channel_info', 'channelinfo', 'about_channel', 'aboutchannel', 'channel'
+                                'cinfo', 'channel_info', 'channelinfo', 'about_channel', 'aboutchannel', 'channel',
                                 'кинфо', 'канал_инфо', 'каналинфо', 'о_канале', 'оканале', 'канал'
                                 ])
     async def channelinfo_command(self, ctx, channel_id: int = None):
