@@ -44,4 +44,4 @@ def parse_cryptonator(emb: discord.Embed):
             emoji = crypto_emoji[items['crypto'].lower()]
         else:
             emoji = ':coin:'
-        emb.add_field(name = f'{emoji}{items["crypto"]}', value = f'{items["price"]} ₽', inline = True)
+        emb.add_field(name = f'{emoji} {items["crypto"]}', value = f'{items["price"]} ₽', inline = True)
