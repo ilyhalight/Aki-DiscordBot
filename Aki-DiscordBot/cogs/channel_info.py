@@ -1,3 +1,4 @@
+from datetime import timedelta
 import discord
 
 from discord.ext import commands
@@ -58,7 +59,7 @@ class ChannelInfo(commands.Cog):
         emb = discord.Embed(title = f'Информация о канале', color = colors['help'])
 
 
-        channel_created_at = channel.created_at.strftime("%d.%m.%Y, %H:%M:%S UTC")
+        channel_created = round((channel.created_at + timedelta(hours=3)).timestamp())
         emb.add_field(name = 'Название', value = channel.mention, inline = True)
         emb.add_field(name = 'ID', value = channel.id, inline = True)
 
@@ -101,7 +102,8 @@ class ChannelInfo(commands.Cog):
             channel_type_emoji = ' '
 
         emb.add_field(name = f'Тип', value = f'{channel_type_emoji} {channel_type}', inline = True)
-        emb.set_footer(text = f'Канал создан: {channel_created_at}', icon_url = avatar(self.bot.user))
+        emb.add_field(name = f'Дата создания', value = f'<t:{channel_created}:D>\n<t:{channel_created}:R>', inline = True)
+        emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
         await ctx.send(embed = emb)
         logger.info(f'Выведена информация о канале {channel.id} — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
 
