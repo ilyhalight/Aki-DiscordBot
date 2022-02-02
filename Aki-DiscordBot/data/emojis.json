@@ -29,5 +29,11 @@
         "status": "<:status:868474272950128650>",
         "version": "<:version:868474836568145940>",
         "github": "<:github:868478604365922314>"
+    },
+    "reactions": {
+        "any": ":thumbsup:"
+    },
+    "tiny_url": {
+        "link": ":link:"
     }
 }
