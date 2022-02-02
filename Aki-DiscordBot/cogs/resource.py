@@ -7,12 +7,15 @@ import distro
 from discord.ext import commands
 
 from core.bot import avatar
+from core.embeds import Helpers
 from core.logger import logger
 from data.colors import colors
 from scripts.checks import is_windows, is_mac
+from scripts.parsers.settings import settings
 
 
-start_time = time.time() # Получаем текущее unix время при запуске бота
+start_time = time.time() # Получаем unix время при запуске бота
+
 
 class Resource(commands.Cog):
     """Показывает информацию о потребление ресурсов ботом"""
@@ -50,6 +53,15 @@ class Resource(commands.Cog):
                 return '%.1f%s' % (value, s)
 
         return f"{number}B"
+
+    def resource_help(self, prefix, emb: discord.Embed):
+        return emb.add_field(name = f'{prefix}ресурсы', value = 'Информация о потребление бота', inline = False)
+
+    async def resource_helper(self, ctx):
+        emb = await Helpers.default_embed(self, ctx, self.bot.user.avatar_url, 'Ресурсы')
+        emb.add_field(name = 'Использование', value = f'`{settings["prefix"]}ресурсы`\n┗ Выведет информацию о ресурсах бота', inline = False)
+        await ctx.send(embed = emb)
+        logger.info(f'Выведена информация о "ресурсы" — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
 
     @commands.command(aliases = [
                                 'resources', 'resource', 'bot_resources', 'bot_resource', 'res',
@@ -99,7 +111,7 @@ class Resource(commands.Cog):
         emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = avatar(self.bot.user))
         emb.set_thumbnail(url = avatar(self.bot.user))
         await ctx.send(embed = emb)
-        logger.info(f'Информация о загруженности бота - Пользователь: {ctx.author} ({ctx.author.id}).')
+        logger.info(f'Выведена информация о загруженности бота — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
 
 def setup(bot):
     bot.add_cog(Resource(bot))
