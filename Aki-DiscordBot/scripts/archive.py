@@ -12,8 +12,8 @@ def create_archive(folder):
             for file in files:
                 zip.write(os.path.join(root, file))
                 zip.close
-        logger.success('ZIP-архив создан - Пользователь: SYSTEM')
+        logger.success('ZIP-архив создан — Пользователь: SYSTEM')
     except ValueError:
-        logger.error('Не удалось создать ZIP-архив - Пользователь: SYSTEM')
+        logger.error('Не удалось создать ZIP-архив — Пользователь: SYSTEM')
         logger.debug(f'Причина ошибки:\n{traceback.format_exc()}')
 
