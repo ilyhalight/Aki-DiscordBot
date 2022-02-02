@@ -5,6 +5,7 @@ from datetime import datetime
 from discord.ext import commands
 
 from core.bot import avatar, is_owner
+from core.embeds import Errors, Helpers
 from core.logger import logger
 from data.colors import colors
 from scripts.parsers.steamid import parse_steamid
@@ -38,22 +39,22 @@ class CSGOGivePrivillege(commands.Cog):
             result: False - Fail
         """
         try:
-            logger.debug('Пытаюсь подключиться к БД - Пользователь: SYSTEM.')
+            logger.debug('Пытаюсь подключиться к БД — Запросил пользователь: SYSTEM.')
             db = open_csgo_db_connection() # Открываем соединение с БД
-            logger.debug('Подключение к БД установлено - Пользователь: SYSTEM.')
+            logger.debug('Подключение к БД установлено — Запросил пользователь: SYSTEM.')
             cursor = db.cursor() # Создаем курсор управления БД
-            logger.debug('Курсор управления БД создан - Пользователь: SYSTEM.')
+            logger.debug('Курсор управления БД создан — Запросил пользователь: SYSTEM.')
 
-            logger.debug('Пытаюсь отправить SQL запрос на получение данных из БД - Пользователь: SYSTEM.')
+            logger.debug('Пытаюсь отправить SQL запрос на получение данных из БД — Запросил пользователь: SYSTEM.')
             cursor.execute(f'SELECT * FROM vip_users WHERE account_id={steamid}') # Отправляем SQL запрос
-            logger.debug('Данные из БД были получены - Пользователь: SYSTEM.')
+            logger.debug('Данные из БД были получены — Запросил пользователь: SYSTEM.')
             result = cursor.fetchone() # Получаем первую строку из полученного кортежа
-            logger.debug('Получена первая строка из полученного кортежа - Пользователь: SYSTEM.')
+            logger.debug('Получена первая строка из полученного кортежа — Запросил пользователь: SYSTEM.')
 
             cursor.close()
-            logger.debug('Доступ к курсору был закрыт - Пользователь: SYSTEM.')
+            logger.debug('Доступ к курсору был закрыт — Запросил пользователь: SYSTEM.')
             db.close()
-            logger.debug('Подключение к БД было закрыто - Пользователь: SYSTEM.')
+            logger.debug('Подключение к БД было закрыто — Запросил пользователь: SYSTEM.')
             return result
         except Exception as err:
             logger.error(err)
@@ -74,29 +75,40 @@ class CSGOGivePrivillege(commands.Cog):
             result: None - Неудача
         """
         try:
-            logger.debug('Пытаюсь подключиться к БД - Пользователь: SYSTEM.')
+            logger.debug('Пытаюсь подключиться к БД — Запросил пользователь: SYSTEM.')
             db = open_csgo_db_connection() # Открываем соединение с БД
-            logger.debug('Подключение к БД установлено - Пользователь: SYSTEM.')
+            logger.debug('Подключение к БД установлено — Запросил пользователь: SYSTEM.')
             cursor = db.cursor() # Создаем курсор управления БД
-            logger.debug('Курсор управления БД создан - Пользователь: SYSTEM.')
+            logger.debug('Курсор управления БД создан — Запросил пользователь: SYSTEM.')
 
-            logger.debug('Пытаюсь отправить SQL запрос на отправку данных в БД - Пользователь: SYSTEM.')
+            logger.debug('Пытаюсь отправить SQL запрос на отправку данных в БД — Запросил пользователь: SYSTEM.')
             sql = ('INSERT INTO `vip_users` (`account_id`, `name`, `lastvisit`, `sid`, `group`, `expires`) VALUES (%s, %s, %s, %s, %s, %s)') 
             data = (int(steamid), username, int(lastvisit), 0, privillege, int(expiries))
             cursor.execute(sql, data) # Отправляем SQL запрос
-            logger.debug('Данные были получены БД - Пользователь: SYSTEM.')
+            logger.debug('Данные были получены БД — Запросил пользователь: SYSTEM.')
             db.commit() # Сохраняем изменения в базе данных
-            logger.debug('Изменения были сохранены в БД - Пользователь: SYSTEM.')
+            logger.debug('Изменения были сохранены в БД — Запросил пользователь: SYSTEM.')
 
             cursor.close()
-            logger.debug('Доступ к курсору был закрыт - Пользователь: SYSTEM.')
+            logger.debug('Доступ к курсору был закрыт — Запросил пользователь: SYSTEM.')
             db.close()
-            logger.debug('Подключение к БД было закрыто - Пользователь: SYSTEM.')
+            logger.debug('Подключение к БД было закрыто — Запросил пользователь: SYSTEM.')
             return True
         except Exception as err:
             logger.error(err)
             return None
-    
+
+    def csgo_give_privillege_help(self, prefix, emb: discord.Embed):
+        return emb.add_field(name = f'{prefix}ксго\_выдать\_привилегию', value = 'Выдать привилегию на сервере CS:GO', inline = False)
+
+    async def csgo_give_privillege_helper(self, ctx):
+        emb = await Helpers.custom_image_embed(self, ctx, self.bot.user.avatar_url, 'server', 'Выдача привилегий CS:GO')
+        emb.add_field(name = 'Использование', value = f'`{settings["prefix"]}ксго_выдать_привилегию <ссылка на стим> <привилегия из groups.ini> <Время в днях/часах>`\n┗ Выдаст игроку привилегию на определенный срок', inline = False)
+        emb.add_field(name = 'Пример', value = f'`{settings["prefix"]}ксго_выдать_привилегию https://steamcommunity.com/id/ToilOfficial VIP 1d`\n┗ Выдаст игроку привилегию VIP на 1 день', inline = False)
+        emb.add_field(name = 'Примечание', value = f'Время, на которое выдаётся привилегия, не может быть указано в месяцах/годах', inline = False)
+        await ctx.send(embed = emb)
+        logger.info(f'Выведена информация о "Выдаче привилегии у игрока в CS:GO" — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
+
     @commands.command(aliases = [
                                 'csgo_give_privillege', 'cs_give_privillege',
                                 'ксго_выдать_привилегию', 'кс_выдать_привилегию',
@@ -154,14 +166,10 @@ class CSGOGivePrivillege(commands.Cog):
                         emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
                         emb.set_author(name = datetime.now().strftime(settings['time_format']), icon_url = ctx.author.avatar_url)
                         await ctx.send(embed = emb)
-                        logger.info(f'Выдана привилегия {privillege} (Срок: {expiries}) на сервере CS:GO игроку {parser[-1]} ("https://steamcommunity.com/id/{parser[0]}") - Пользователь: {ctx.author} ({ctx.author.id}).')
+                        logger.info(f'Выдана привилегия {privillege} (Срок: {expiries}) на сервере CS:GO игроку {parser[-1]} ("https://steamcommunity.com/id/{parser[0]}") — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
                     else:
-                        emb = discord.Embed(title = f'Не удалось отправить/сохранить данные в БД', color = colors['error'])
-                        emb.set_author(name = 'Ошибка', icon_url = avatar(ctx.author))
-                        emb.set_thumbnail(url = imgs['error'])
-                        emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
-                        await ctx.send(embed = emb)
-                        logger.error(f'Не удалось отправить/сохранить данные о новой привилегии игрока на сервере CS:GO в БД - Пользователь: {ctx.author} ({ctx.author.id}).')
+                        await Errors.custom_msg_embed(self, ctx, 'Не удалось отправить/сохранить данные в БД')
+                        logger.error(f'Не удалось отправить/сохранить данные о новой привилегии игрока на сервере CS:GO в БД — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
 
                 elif type(data_from_db) is tuple and data_from_db[0] == int(steamid3):
                     emb = discord.Embed(title = f'У игрока уже есть привилегия на сервере CS:GO', color = colors['error'])
@@ -174,53 +182,30 @@ class CSGOGivePrivillege(commands.Cog):
                     emb.set_thumbnail(url = imgs['error'])
                     emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
                     await ctx.send(embed = emb)
-                    logger.info(f'У игрока {parser[-1]} ("https://steamcommunity.com/id/{parser[0]}") уже есть привилегия {data_from_db[4]} (Срок: {data_from_db[5]}) на сервере CS:GO - Пользователь: {ctx.author} ({ctx.author.id}).')
+                    logger.info(f'У игрока {parser[-1]} ("https://steamcommunity.com/id/{parser[0]}") уже есть привилегия {data_from_db[4]} (Срок: {data_from_db[5]}) на сервере CS:GO — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
 
                 elif data_from_db is False:
-                    emb = discord.Embed(title = f'Не удалось получить данные из БД', color = colors['error'])
-                    emb.set_author(name = 'Ошибка', icon_url = avatar(ctx.author))
-                    emb.set_thumbnail(url = imgs['error'])
-                    emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
-                    await ctx.send(embed = emb)
-                    logger.error(f'Не удалось получить данные из БД - Пользователь: {ctx.author} ({ctx.author.id}).')
-
+                    await Errors.custom_msg_embed(self, ctx, 'Не удалось получить данные из БД')
+                    logger.error(f'Не удалось получить данные из БД — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
                 else:
-                    emb = discord.Embed(title = f'Неизвестная ошибка', color = colors['error'])
-                    emb.set_author(name = 'Ошибка', icon_url = avatar(ctx.author))
-                    emb.set_thumbnail(url = imgs['error'])
-                    emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
-                    await ctx.send(embed = emb)
-                    logger.error(f'Произошла неизвестная ошибка - Пользователь: {ctx.author} ({ctx.author.id}).')
+                    await Errors.custom_msg_embed(self, ctx, 'Неизвестная ошибка')
+                    logger.error(f'Произошла неизвестная ошибка — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
             else:
-                emb = discord.Embed(title = f'Произошла ошибка при парсинге стима игрока', color = colors['error'])
-                emb.set_author(name = 'Ошибка', icon_url = avatar(ctx.author))
-                emb.set_thumbnail(url = imgs['error'])
-                emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
-                await ctx.send(embed = emb)
-                logger.error(f'Не удалось получить подлинные данные о стиме игрока - Пользователь: {ctx.author} ({ctx.author.id}).')
+                await Errors.custom_msg_embed(self, ctx, 'Произошла ошибка при парсинге стима игрока')
+                logger.error(f'Не удалось получить подлинные данные о стиме игрока — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
         else:
-            await ctx.send(embed = discord.Embed(title = '`Вы не являетесь моим создателем!`', color = colors['error']))
-            logger.warning(f'Неудачная попытка выдать привилегию на сервере CS:GO - Недостаточно прав - Пользователь: {ctx.author} ({ctx.author.id}).')
+            await Errors.no_permissions_embed(self, ctx)
+            logger.warning(f'Неудачная попытка выдать привилегию на сервере CS:GO - Недостаточно прав — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
+
 
     @csgo_give_privillege_command.error
     async def csgo_give_privillege_command_error(self, ctx, error):
         if isinstance(error, commands.errors.MissingRequiredArgument) or isinstance(error, commands.errors.BadArgument):
-            emb = discord.Embed(title = 'Выдача привилегий CS:GO', color = colors['helper'])
-            emb.set_author(name = 'Помощник', icon_url = avatar(ctx.author))
-            emb.add_field(name = 'Использование', value = f'`{settings["prefix"]}ксго_выдать_привилегию <ссылка на стим> <привилегия из groups.ini> <Время в днях/часах>`\n┗ Выдаст игроку привилегию на определенный срок', inline = False)
-            emb.add_field(name = 'Пример', value = f'`{settings["prefix"]}ксго_выдать_привилегию https://steamcommunity.com/id/ToilOfficial VIP 1d`\n┗ Выдаст игроку привилегию VIP на 1 день', inline = False)
-            emb.add_field(name = 'Примечание', value = f'Время, на которое выдаётся привилегия, не может быть указано в месяцах/годах', inline = False)
-            emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
-            emb.set_thumbnail(url = imgs['server'])
-            await ctx.send(embed = emb)
-            logger.info(f'Выведена информация о "Выдаче привилегии у игрока в CS:GO" - Пользователь: {ctx.author} ({ctx.author.id}).')
+            await self.csgo_give_privillege_helper(ctx)
         else:
-            emb = discord.Embed(title = 'Не удалось выдать привилегию на сервере CS:GO', color = colors['error'])
-            emb.set_author(name = 'Ошибка', icon_url = avatar(ctx.author))
-            emb.add_field(name = 'Причина ошибки: ', value = error)
-            emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
-            await ctx.send(embed = emb)
-            logger.error('Ошибка "Не удалось выдать привилегию на сервере CS:GO" - Пользователь: SYSTEM.')
+            await Errors.custom_msg_embed(self, ctx, error)
+            logger.error('Ошибка "Не удалось выдать привилегию на сервере CS:GO" — Запросил пользователь: SYSTEM.')
             logger.error(error)
+
 def setup(bot):
     bot.add_cog(CSGOGivePrivillege(bot))
