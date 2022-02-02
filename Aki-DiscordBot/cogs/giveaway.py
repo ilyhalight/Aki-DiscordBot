@@ -1,17 +1,11 @@
-import traceback
 import discord
 import asyncio
 import random
 
 from discord.ext import commands
 from loguru import logger
+from core.embeds import Errors, Helpers
 from scripts.parsers.settings import settings
-try:
-    from scripts.parsers.imgs import imgs
-except ImportError:
-    logger.error('Не удалось загрузить модуль scripts/parsers/imgs.py - Пользователь: SYSTEM.')
-    logger.debug(f'Причина ошибки:\n{traceback.format_exc()}')
-from core.bot import bot
 
 intervals = (
     ('weeks', 604800),  # 60 * 60 * 24 * 7
@@ -33,11 +27,23 @@ def display_time(seconds, granularity=2):
             result.append("{} {}".format(value, name))
     return ', '.join(result[:granularity])
 
+
 class Giveaway(commands.Cog):
     """Создание розыгрышей/конкурсов"""
 
     def __init__(self, bot):
         self.bot = bot
+
+    def giveaway_help(self, prefix, emb: discord.Embed):
+        return emb.add_field(name = f'{prefix}розыгрыш', value = 'Создать розыгрыш', inline = False)
+
+    async def giveaway_helper(self, ctx):
+        emb = await Helpers.default_embed(self, ctx, self.bot.user.avatar_url, 'Розыгрыши')
+        emb.add_field(name = 'Использование', value = f'`{settings["prefix"]}розыгрыш <кол-во победителей> <время> <тест>`\n┗ Создаст розыгрыш от вашего лица на определенное время.', inline = False)
+        emb.add_field(name = 'Пример', value = f'`{settings["prefix"]}розыгрыш 1 1d 1 Место: 1000 рублей`\n┗ Создаст розыгрыш на 1 день для 1 победителя', inline = False)
+        emb.add_field(name = 'Примечание', value = f'Время розыгрыша не может бысть указано в месяцах/годах', inline = False)
+        await ctx.send(embed = emb)
+        logger.info(f'Выведена информация о "Создании розыгрыша" — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
 
     @commands.command(aliases = ['giveaway', 'розыгрыш'])
     @commands.has_permissions(administrator = True)
@@ -67,6 +73,7 @@ class Giveaway(commands.Cog):
             emb.set_footer(text = f"{winners_text}: {winners} | Конец через {end_time_str}")
             message = await ctx.send(embed = emb)
             await message.add_reaction('🎫') # Добавляем емодзи
+            logger.info(f'Розыгрыш начался — Запросил пользователь: {ctx.author} ({ctx.author.id})')
             await asyncio.sleep(final_time) # Асинхронное ожидание в секундах
             mess = await ctx.channel.fetch_message(message.id)
             winner_array = []
@@ -90,17 +97,19 @@ class Giveaway(commands.Cog):
             emb_final.set_footer(text = f"{winners_text}: {winners} | Закончился")
 
             await message.edit(embed = emb_final)
+            logger.info(f'Розыгрыш закончился — Запросил пользователь: {ctx.author} ({ctx.author.id})')
+
 
     @giveaway_command.error
     async def giveaway_command_error(self, ctx, error):
-        if isinstance (error, commands.MissingRequiredArgument): # Если нехватает аргументов
-            emb = discord.Embed(title = 'Помощник - Розыгрыши', color = 0x30DD30)
-            emb.add_field(name = 'Использование', value = f'`{settings["prefix"]}розыгрыш <кол-во победителей> <время> <тест>`\n┗ Создаст розыгрыш от вашего лица на определенное время.', inline = False)
-            emb.add_field(name = 'Пример', value = f'`{settings["prefix"]}розыгрыш 1 1d 1 Место: 1000 рублей`\n┗ Создаст розыгрыш на 1 день для 1 победителя', inline = False)
-            emb.add_field(name = 'Примечание', value = f'Время розыгрыша не может бысть указано в месяцах/годах', inline = False)
-            emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
-            emb.set_thumbnail(url = imgs['giveaway']) # Не будет работать, если нету json с картинками
-            await ctx.send(embed = emb)
+        if isinstance (error, commands.MissingRequiredArgument):
+            self.giveaway_helper(ctx)
+            logger.info(f'Выведена информация о "Создании розыгрыша" — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
+            logger.error(error)
+        else:
+            await Errors.custom_msg_embed(self, ctx, error)
+            logger.error('Ошибка создания розыгрыша — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
+            logger.error(error)
 
 def setup(bot):
     bot.add_cog(Giveaway(bot))
