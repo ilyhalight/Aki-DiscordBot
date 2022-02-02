@@ -5,7 +5,7 @@ from discord.ext import commands
 from core.embeds import Errors, Helpers
 
 from data.colors import colors
-from core.bot import avatar, bot
+from core.bot import bot
 from core.logger import logger
 from scripts.parsers.settings import settings
 from scripts.parsers.emojis import emojis
