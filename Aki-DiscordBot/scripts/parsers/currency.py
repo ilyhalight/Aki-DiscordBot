@@ -25,5 +25,7 @@ def parse_cbr():
     for rate in rates:
         rate = rate.text.replace(',', '.').replace(' ', '')
         rate = float(rate)
+        rate = round(rate, 2)
+        rate = str(rate).replace('.', ',')
         rates_array.append(rate)
     return rates_array
