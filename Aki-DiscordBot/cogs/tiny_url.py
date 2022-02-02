@@ -9,6 +9,9 @@ from data.colors import colors
 from core.logger import logger
 from scripts.parsers.imgs import imgs
 from scripts.parsers.settings import settings
+from scripts.parsers.emojis import emojis
+
+emoji = emojis['reactions']
 
 
 class TinyUrl(commands.Cog):
@@ -38,8 +41,8 @@ class TinyUrl(commands.Cog):
         else:
             short_link = pyshorteners.Shortener().tinyurl.short(link)
             emb = discord.Embed(title = '', color = colors['help'])
-            emb.add_field(name = ':link:Первоначальная ссылка', value = f'⠀⠀{link}', inline = True)
-            emb.add_field(name = ':link:Сокращенная ссылка', value = f'⠀⠀{short_link}', inline = True)
+            emb.add_field(name = f'{emoji["link"]}Первоначальная ссылка', value = f'⠀⠀{link}', inline = True)
+            emb.add_field(name = f'{emoji["link"]}Сокращенная ссылка', value = f'⠀⠀{short_link}', inline = True)
             emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = avatar(self.bot.user))
             emb.set_author(name = 'Ссылка успешно сокращена', icon_url = ctx.author.avatar_url)
             emb.set_thumbnail(url = imgs['tinyurl'])
