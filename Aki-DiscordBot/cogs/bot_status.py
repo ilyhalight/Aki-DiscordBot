@@ -1,14 +1,11 @@
-import traceback
 import discord
 
 from discord.ext import commands
 
 from core.bot import avatar, is_owner
 from core.embeds import Errors, Helpers
-from data.colors import colors
 from core.logger import logger
 from scripts.parsers.settings import settings
-from scripts.parsers.imgs import imgs
 from scripts.parsers.status import status, update_status
 
 
