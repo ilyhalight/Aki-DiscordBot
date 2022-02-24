@@ -13,7 +13,6 @@ from cogs.avatar import Avatar
 from cogs.bot_info import BotInfo
 from cogs.bot_status import BotStatus
 from cogs.channel_info import ChannelInfo
-from cogs.crypto_currency import CryptoCurrency
 from cogs.csgo_give_privillege import CSGOGivePrivillege
 from cogs.csgo_remove_privillege import CSGORemovePrivillege
 from cogs.currency import Currency
