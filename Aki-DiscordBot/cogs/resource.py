@@ -12,6 +12,7 @@ from core.logger import logger
 from data.colors import colors
 from scripts.checks import is_windows, is_mac
 from scripts.parsers.settings import settings
+from scripts.parsers.emojis import emojis
 
 
 start_time = time.time() # Получаем unix время при запуске бота
@@ -19,6 +20,8 @@ start_time = time.time() # Получаем unix время при запуск�
 
 class Resource(commands.Cog):
     """Показывает информацию о потребление ресурсов ботом"""
+
+    emoji = emojis['resource']
 
     def __init__(self, bot):
         self.bot = bot
@@ -103,11 +106,11 @@ class Resource(commands.Cog):
             os_version = f'{os_info[0]} {os_info[1]}'
 
         emb = discord.Embed(title = 'Потребление ресурсов', color = colors['help'])
-        emb.add_field(name = '<:cpu:868488839671476314>CPU', value = f'⠀⠀{ps.cpu_percent()}%', inline = True)
-        emb.add_field(name = '<:ram:868489182383845376>RAM', value = f'⠀⠀{mem_used}/{mem_total}', inline = True)
-        emb.add_field(name = '<:ping:868489884023787580>PING', value = f'⠀⠀{ping * 1000:.0f}ms\n', inline = True)
-        emb.add_field(name = '<:os:868494322415312926>OS:', value = f'⠀⠀{os_version}', inline = True)
-        emb.add_field(name = '<:start:868490519410511902>LAUNCH:', value = f'⠀⠀{msg}', inline = True)
+        emb.add_field(name = f'{self.emoji["cpu"]} ЦП', value = f'⠀⠀{ps.cpu_percent()}%', inline = True)
+        emb.add_field(name = f'{self.emoji["ram"]} ОЗУ', value = f'⠀⠀{mem_used}/{mem_total}', inline = True)
+        emb.add_field(name = f'{self.emoji["ping"]} Пинг', value = f'⠀⠀{ping * 1000:.0f}ms\n', inline = True)
+        emb.add_field(name = f'{self.emoji["os"]} ОС', value = f'⠀⠀{os_version}', inline = True)
+        emb.add_field(name = f'{self.emoji["start"]} Запущен', value = f'⠀⠀{msg}', inline = True)
         emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = avatar(self.bot.user))
         emb.set_thumbnail(url = avatar(self.bot.user))
         await ctx.send(embed = emb)
