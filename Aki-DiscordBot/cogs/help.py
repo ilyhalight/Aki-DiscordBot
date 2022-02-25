@@ -13,13 +13,15 @@ from cogs.avatar import Avatar
 from cogs.bot_info import BotInfo
 from cogs.bot_status import BotStatus
 from cogs.channel_info import ChannelInfo
+# from cogs.crypto_currency import CryptoCurrency
 from cogs.csgo_give_privillege import CSGOGivePrivillege
 from cogs.csgo_remove_privillege import CSGORemovePrivillege
-from cogs.currency import Currency
+# from cogs.currency import Currency
 from cogs.giveaway import Giveaway
 from cogs.random import Random
 from cogs.reactions import Reactions
 from cogs.resource import Resource
+from cogs.steam_info import SteamInfo
 from cogs.tiny_url import TinyUrl
 
 
@@ -121,9 +123,10 @@ class Help(commands.Cog):
             try:
                 Avatar.avatar_help(self, settings["prefix"], emb)
                 Random.random_help(self, settings["prefix"], emb)
-                CryptoCurrency.cryptocurrency_help(self, settings["prefix"], emb)
-                Currency.currency_help(self, settings["prefix"], emb)
+                # CryptoCurrency.cryptocurrency_help(self, settings["prefix"], emb)
+                # Currency.currency_help(self, settings["prefix"], emb)
                 TinyUrl.tinyurl_help(self, settings["prefix"], emb)
+                SteamInfo.steaminfo_help(self, settings["prefix"], emb)
             except:
                 emb.add_field(name = f'Ошибка', value = 'Не удалось загрузить команды', inline = False)
 
@@ -133,7 +136,7 @@ class Help(commands.Cog):
             logger.info(f'Выведена информация о "Доступных командах группы `Утилиты`" — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
 
         elif is_owner(ctx.author.id) is True and title.lower() in ['owner', 'владелец']:
-            emb = discord.Embed(title = f'Доступные команды группы `Утилиты`:', description = f'**Префикс: `{settings["prefix"]}`**', color = colors['help'])
+            emb = discord.Embed(title = f'Доступные команды группы `Владелец`:', description = f'**Префикс: `{settings["prefix"]}`**', color = colors['help'])
 
             try:
                 BotStatus.botstatus_help(self, settings["prefix"], emb)
@@ -145,7 +148,7 @@ class Help(commands.Cog):
             emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
             if imgs: emb.set_thumbnail(url = imgs['help'])
             await ctx.send (embed = emb)
-            logger.info(f'Выведена информация о "Доступных командах группы `Утилиты`" — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
+            logger.info(f'Выведена информация о "Доступных командах группы `Владелец`" — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
         else:
             await self.help_default_message(ctx)
 
