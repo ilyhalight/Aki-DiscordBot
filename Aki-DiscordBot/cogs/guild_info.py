@@ -7,10 +7,11 @@ from data.colors import colors
 from scripts.data_parsers.guild_verification_level import verification_level
 from scripts.parsers.emojis import emojis
 
-emoji = emojis['guild_info']
 
 class GuildInfo(commands.Cog):
     """Показывает информацию о текущем сервере"""
+
+    emoji = emojis['guild_info']
 
     def __init__(self, bot):
         self.bot = bot
@@ -34,12 +35,12 @@ class GuildInfo(commands.Cog):
         for member in guild.members:
             if member.bot is True:
                 bots += 1
-        emb.add_field(name = f'Участники', value = f'{emoji["users"]} Всего: **{guild.member_count}**\n{emoji["user"]} Людей: **{guild.member_count - bots}**\n{emoji["bot"]} Ботов: **{bots}**', inline = True)
+        emb.add_field(name = f'Участники', value = f'{self.emoji["users"]} Всего: **{guild.member_count}**\n{self.emoji["user"]} Людей: **{guild.member_count - bots}**\n{self.emoji["bot"]} Ботов: **{bots}**', inline = True)
         all_channels = len(guild.channels) - len(guild.categories)
         if len(guild.stage_channels) != 0:
-            channels_data = f'{emoji["all"]} Всего: **{all_channels}**\n{emoji["text"]} Текстовых: **{len(guild.text_channels)}**\n{emoji["voice"]} Голосовых: **{len(guild.voice_channels)}**\n{emoji["stage"]} Трибунных: **{len(guild.stage_channels)}**'
+            channels_data = f'{self.emoji["all"]} Всего: **{all_channels}**\n{self.emoji["text"]} Текстовых: **{len(guild.text_channels)}**\n{self.emoji["voice"]} Голосовых: **{len(guild.voice_channels)}**\n{self.emoji["stage"]} Трибунных: **{len(guild.stage_channels)}**'
         else:
-            channels_data = f'{emoji["all"]} Всего: **{all_channels}**\n{emoji["text"]} Текстовых: **{len(guild.text_channels)}**\n{emoji["voice"]} Голосовых: **{len(guild.voice_channels)}**'
+            channels_data = f'{self.emoji["all"]} Всего: **{all_channels}**\n{self.emoji["text"]} Текстовых: **{len(guild.text_channels)}**\n{self.emoji["voice"]} Голосовых: **{len(guild.voice_channels)}**'
         emb.add_field(name = f'Каналы', value = channels_data, inline = True)
         emb.add_field(name = f'Дата создания', value = f'<t:{guild_created}:D>\n<t:{guild_created}:R>', inline = True)
         emb.add_field(name = f'ID', value = guild.id, inline = True)

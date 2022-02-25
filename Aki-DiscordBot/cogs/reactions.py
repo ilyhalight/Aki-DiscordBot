@@ -11,10 +11,12 @@ emoji_add = ["добавить", 'add']
 emoji_del = ["удалить", "стереть", "очистить", 'remove', 'clear', 'delete', 'del']
 emoji_clear = ["удалить_всё", "стереть_всё", "очистить_всё", "удалить_все", "стереть_все", "очистить_все", 'remove_all', 'clear_all', 'delete_all']
 
-emoji = emojis['reactions']
 
 class Reactions(commands.Cog):
     """Взаимодействие с эмоджи"""
+
+    emoji = emojis['reactions']
+
 
     def __init__(self, bot):
         self.bot = bot
@@ -25,8 +27,8 @@ class Reactions(commands.Cog):
     async def reactions_helper(self, ctx):
         emb = await Helpers.default_embed(self, ctx, self.bot.user.avatar_url, 'Реакции')
         emb.add_field(name = 'Использование', value = f'`{settings["prefix"]}реакция <действие> <id сообщения> <реакция>`\n┗ Взаимодействие с реакциями', inline = False)
-        emb.add_field(name = 'Пример 1', value = f'`{settings["prefix"]}реакция добавить 824428281104564264 {emoji["any"]}`\n┗ Добавит к сообщению с заданным айди реакцию {emoji["any"]}.', inline = False)
-        emb.add_field(name = 'Пример 2', value = f'`{settings["prefix"]}реакция очистить 824428281104564264 {emoji["any"]}`\n┗ Очистит в сообщение с заданным айди реакцию {emoji["any"]}.', inline = False)
+        emb.add_field(name = 'Пример 1', value = f'`{settings["prefix"]}реакция добавить 824428281104564264 {self.emoji["any"]}`\n┗ Добавит к сообщению с заданным айди реакцию {self.emoji["any"]}.', inline = False)
+        emb.add_field(name = 'Пример 2', value = f'`{settings["prefix"]}реакция очистить 824428281104564264 {self.emoji["any"]}`\n┗ Очистит в сообщение с заданным айди реакцию {self.emoji["any"]}.', inline = False)
         emb.add_field(name = 'Пример 3', value = f'`{settings["prefix"]}реакция очистить_все 824428281104564264`\n┗ Очистит в сообщение с заданным айди абсолютно все реакции.', inline = False)
         await ctx.send(embed = emb)
         logger.info(f'Выведена информация о "реакция" — Запросил пользователь: {ctx.author} ({ctx.author.id}).')

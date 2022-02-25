@@ -10,11 +10,11 @@ from scripts.parsers.emojis import emojis
 from scripts.parsers.info import info
 from data.colors import colors
 
-emoji = emojis['bot_info']
-
 
 class BotInfo(commands.Cog):
     """Показывает информацию о боте"""
+
+    emoji = emojis['bot_info']
 
     def __init__(self, bot):
         self.bot = bot
@@ -34,11 +34,11 @@ class BotInfo(commands.Cog):
                                 ])
     async def botinfo_command (self, ctx):
         emb = discord.Embed(title = ctx.guild.name, description = f'Информация о боте **{self.bot.user.name}**.\nПодробнее о командах - `{settings["prefix"]}хелп`', color = colors['help'])
-        emb.add_field(name = f'{emoji["creator"]} Создатель:', value = f'⠀⠀{owner["name"]}#{owner["tag"]}', inline = True)
-        emb.add_field(name = f'{emoji["license"]} Лицензия:', value = '⠀⠀MIT License', inline = True)
-        emb.add_field(name = f'{emoji["status"]} Статус:', value = f'⠀⠀{info["status"]}', inline = True)
-        emb.add_field(name = f'{emoji["version"]} Версия:', value = f'⠀⠀{info["version"]}', inline = True)
-        emb.add_field(name = f'{emoji["github"]} GitHub:', value = f'⠀⠀[Тык](https://github.com/ilyhalight/Aki-DiscordBot)', inline = True)
+        emb.add_field(name = f'{self.emoji["creator"]} Создатель:', value = f'⠀⠀{owner["name"]}#{owner["tag"]}', inline = True)
+        emb.add_field(name = f'{self.emoji["license"]} Лицензия:', value = '⠀⠀MIT License', inline = True)
+        emb.add_field(name = f'{self.emoji["status"]} Статус:', value = f'⠀⠀{info["status"]}', inline = True)
+        emb.add_field(name = f'{self.emoji["version"]} Версия:', value = f'⠀⠀{info["version"]}', inline = True)
+        emb.add_field(name = f'{self.emoji["github"]} GitHub:', value = f'⠀⠀[Тык](https://github.com/ilyhalight/Aki-DiscordBot)', inline = True)
         emb.set_thumbnail(url = avatar(self.bot.user))
         emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = avatar(self.bot.user))
         await ctx.send(embed = emb)

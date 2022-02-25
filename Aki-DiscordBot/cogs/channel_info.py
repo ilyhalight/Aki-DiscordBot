@@ -21,11 +21,11 @@ channels = {
     'stage_voice': 'Сценический'
 }
 
-emoji = emojis['channel_info']
-
 
 class ChannelInfo(commands.Cog):
     """Показывает информацию о канале c заданным ID"""
+
+    emoji = emojis['channel_info']
 
     def __init__(self, bot):
         self.bot = bot
@@ -65,24 +65,24 @@ class ChannelInfo(commands.Cog):
 
         if channel.category is not None: emb.add_field(name = 'В категории', value = channel.category, inline = True)
         if str(channel.type) == 'text':
-            channel_type_emoji = emoji['text']
+            channel_type_emoji = self.emoji['text']
             if channel.slowmode_delay is not None and channel.slowmode_delay != 0:
                 emb.add_field(name = 'Медленный режим', value = f'{channel.slowmode_delay} сек.', inline = True)
             if channel.is_nsfw() == True and channel.is_news() == True:
                 channel_type = f'Новостной NSFW'
-                channel_type_emoji = emoji['news_nsfw']
+                channel_type_emoji = self.emoji['news_nsfw']
             elif channel.is_nsfw() == True and channel.is_news() == False:
                 channel_type = f'{channel_type} NSFW'
-                channel_type_emoji = emoji['text_nsfw']
+                channel_type_emoji = self.emoji['text_nsfw']
             elif channel.is_nsfw() == False and channel.is_news() == True:
                 channel_type = f'Новостной'
-                channel_type_emoji = emoji['news']
+                channel_type_emoji = self.emoji['news']
 
         elif str(channel.type) == 'voice' or str(channel.type) == 'stage':
             if str(channel.type) == 'voice':
-                channel_type_emoji = emoji['voice']
+                channel_type_emoji = self.emoji['voice']
             else:
-                channel_type_emoji = emoji['stage']
+                channel_type_emoji = self.emoji['stage']
             bitrate = str(channel.bitrate)
 
             emb.add_field(name = 'Битрейт', value = f'{bitrate[:-3]} кбит/c', inline = True)
@@ -96,7 +96,7 @@ class ChannelInfo(commands.Cog):
                 emb.add_field(name = 'Участники', value = len(channel.voice_states), inline = True)
 
         elif str(channel.type) == 'store':
-            channel_type_emoji = emoji['store']
+            channel_type_emoji = self.emoji['store']
 
         else:
             channel_type_emoji = ' '
