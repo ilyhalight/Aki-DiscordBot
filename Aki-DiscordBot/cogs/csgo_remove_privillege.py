@@ -10,6 +10,7 @@ from data.colors import colors
 from scripts.parsers.steamid import parse_steamid
 from scripts.parsers.imgs import imgs
 from scripts.parsers.settings import settings
+from scripts.parsers.emojis import emojis
 from scripts.database import open_csgo_db_connection
 
 time_rotation = {
@@ -23,6 +24,8 @@ time_rotation = {
 
 class CSGORemovePrivillege(commands.Cog):
     """Позволяет удалить привилегию игроку на серверах CS:GO"""
+
+    emoji = emojis['csgo_privillege']
 
     def __init__(self, bot):
         self.bot = bot
@@ -134,10 +137,10 @@ class CSGORemovePrivillege(commands.Cog):
                     delete_result = self.delete_data_to_db(steamid3)
                     if delete_result is True:
                         emb = discord.Embed(title = f'Удалена привилегия на сервере CS:GO', color = colors['success'])
-                        emb.add_field(name='<:user:921910005094039563>Игрок', value = parser[-1], inline = True)
-                        emb.add_field(name='<:privillege:921910024647872522>Привилегия', value = data_from_db[4], inline = True)
-                        emb.add_field(name='<:expiries:921910297726451722>Срок', value = data_from_db[5], inline = True)
-                        emb.add_field(name='<:steam:921909978850271284>Ссылка на профиль в стиме', value= f'https://steamcommunity.com/id/{parser[0]}', inline = False)
+                        emb.add_field(name = f'{self.emoji["steam_user"]} Ник', value = parser[-1], inline = True)
+                        emb.add_field(name = f'{self.emoji["privillege"]} Привилегия', value = data_from_db[4], inline = True)
+                        emb.add_field(name = f'{self.emoji["expiries"]} Срок', value = f'<t:{data_from_db[5]}:D>\n<t:{data_from_db[5]}:R>', inline = True)
+                        emb.add_field(name = f'{self.emoji["steam"]} Профиль в стиме', value= f'[Тык](https://steamcommunity.com/id/{parser[0]})', inline = True)
                         emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
                         emb.set_author(name = datetime.now().strftime(settings['time_format']), icon_url = ctx.author.avatar_url)
                         await ctx.send(embed = emb)
@@ -149,8 +152,9 @@ class CSGORemovePrivillege(commands.Cog):
                 elif data_from_db is not tuple and data_from_db is not False:
                     emb = discord.Embed(title = f'У игрока нет привилегии на сервере CS:GO', color = colors['error'])
                     emb.set_author(name = 'Ошибка', icon_url = avatar(ctx.author))
-                    emb.add_field(name='<:user:921910005094039563>Ник', value = parser[-1], inline = True)
-                    emb.add_field(name='<:steam:921909978850271284>SteamID3', value = parser[2], inline = True)
+                    emb.add_field(name = f'{self.emoji["steam_user"]} Ник', value = parser[-1], inline = True)
+                    emb.add_field(name = f'{self.emoji["steam"]} SteamID3', value = parser[2], inline = True)
+                    emb.add_field(name = f'{self.emoji["steam"]} Профиль в стиме', value= f'[Тык](https://steamcommunity.com/id/{parser[0]})', inline = True)
                     emb.set_thumbnail(url = imgs['error'])
                     emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
                     await ctx.send(embed = emb)
