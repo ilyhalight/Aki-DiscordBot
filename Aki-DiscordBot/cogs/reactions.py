@@ -1,8 +1,9 @@
+import asyncio
 import discord
 
 from discord.ext import commands
 
-from core.embeds import Helpers
+from core.embeds import Errors, Helpers
 from core.logger import logger
 from scripts.parsers.settings import settings
 from scripts.parsers.emojis import emojis
@@ -39,20 +40,42 @@ class Reactions(commands.Cog):
                                 ])
     @commands.has_permissions(administrator = True)
     async def reactions_command(self, ctx, act: str = None, id: int = None, reaction: str = None):
-        if act is not None and id is not None:
-            await ctx.message.delete()
+        if all((act, id)):
             message = await ctx.message.channel.fetch_message(id)
             if act.lower() in emoji_add and reaction is not None:
                 await message.add_reaction(reaction)
                 logger.success(f'К сообщению "{message.id}" была добавлена реакция "{reaction}" — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
-            if act.lower() in emoji_del and reaction != None:
+                await ctx.message.add_reaction('✅')
+            elif act.lower() in emoji_del and reaction is not None:
                 await message.clear_reaction(reaction)
                 logger.success(f'В сообщение "{message.id}" были очищены реакции "{reaction}" — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
-            if act.lower() in emoji_clear:
+                await ctx.message.add_reaction('✅')
+            elif act.lower() in emoji_clear:
                 await message.clear_reactions()
                 logger.success(f'В сообщение "{message.id}" были очищены все реакции — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
+                await ctx.message.add_reaction('✅')
+            else:
+                await ctx.message.add_reaction('❌')
+            await asyncio.sleep(5)
+            await ctx.message.delete()
         else:
             await self.reactions_helper(ctx)
+
+    @reactions_command.error
+    async def reactions_command_error(self, ctx, error):
+        if isinstance(error, commands.errors.BadArgument):
+            await self.reactions_helper(ctx)
+        elif isinstance(error, commands.errors.CommandInvokeError):
+            if error.args[0] == 'Command raised an exception: HTTPException: 400 Bad Request (error code: 10014): Unknown Emoji':
+                await Errors.custom_msg_embed(self, ctx, 'Не удалось найти этот эмодзи в нашей базе')
+            elif error.args[0] == 'Command raised an exception: NotFound: 404 Not Found (error code: 10008): Unknown Message':
+                await Errors.custom_msg_embed(self, ctx, 'Сообщение с этим ID не найдено на этом сервере')
+            else:
+                await Errors.custom_msg_embed(self, ctx, error)
+            logger.error(f'Не удалось произвести действие с реакциями - Причина: {error} — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
+        else:
+            await Errors.custom_msg_embed(self, ctx, error)
+            logger.error(f'Не удалось произвести действие с реакциями - Причина: {error} — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
 
 def setup(bot):
     bot.add_cog(Reactions(bot))
