@@ -112,6 +112,22 @@ class CSGOGivePrivillege(commands.Cog):
         await ctx.send(embed = emb)
         logger.info(f'Выведена информация о "Выдаче привилегии у игрока в CS:GO" — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
 
+    async def csgo_give_privillege_dtdb(self, ctx, steamid64, expiries, steamid3, nick, timestamp, privillege, result_timestamp):
+        transfer_result = self.transfer_data_to_db(steamid3, nick, timestamp, privillege, result_timestamp)
+        if transfer_result is True:
+            emb = discord.Embed(title = f'Выдана привилегия на сервере CS:GO', color = colors['success'])
+            emb.add_field(name = f'{self.emoji["steam_user"]} Ник', value = nick, inline = True)
+            emb.add_field(name = f'{self.emoji["privillege"]} Привилегия', value = privillege, inline = True)
+            emb.add_field(name = f'{self.emoji["expiries"]} Срок', value = expiries, inline = True)
+            emb.add_field(name = f'{self.emoji["steam"]} Профиль в стиме', value= f'[Тык](https://steamcommunity.com/id/{steamid64})', inline = True)
+            emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
+            emb.set_author(name = datetime.now().strftime(settings['time_format']), icon_url = ctx.author.avatar_url)
+            await ctx.send(embed = emb)
+            logger.info(f'Выдана привилегия {privillege} (Срок: {expiries}) на сервере CS:GO игроку {nick} ("https://steamcommunity.com/id/{steamid64}") — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
+        else:
+            await Errors.custom_msg_embed(self, ctx, 'Не удалось отправить/сохранить данные в БД')
+            logger.error(f'Не удалось отправить/сохранить данные о новой привилегии игрока на сервере CS:GO в БД — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
+
     @commands.command(aliases = [
                                 'csgo_give_privillege', 'cs_give_privillege',
                                 'ксго_выдать_привилегию', 'кс_выдать_привилегию',
@@ -159,35 +175,24 @@ class CSGOGivePrivillege(commands.Cog):
                 data_from_db = self.get_data_from_db(steamid3)
 
                 if type(data_from_db) is not tuple and data_from_db is not False:
-                    transfer_result = self.transfer_data_to_db(steamid3, parser[-1], timestamp, privillege, result_timestamp)
-                    if transfer_result is True:
-                        emb = discord.Embed(title = f'Выдана привилегия на сервере CS:GO', color = colors['success'])
-                        emb.add_field(name = f'{self.emoji["steam_user"]} Ник', value = parser[-1], inline = True)
-                        emb.add_field(name = f'{self.emoji["privillege"]} Привилегия', value = privillege, inline = True)
-                        emb.add_field(name = f'{self.emoji["expiries"]} Срок', value = expiries, inline = True)
-                        emb.add_field(name = f'{self.emoji["steam"]} Профиль в стиме', value= f'[Тык](https://steamcommunity.com/id/{parser[0]})', inline = True)
-                        emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
-                        emb.set_author(name = datetime.now().strftime(settings['time_format']), icon_url = ctx.author.avatar_url)
-                        await ctx.send(embed = emb)
-                        logger.info(f'Выдана привилегия {privillege} (Срок: {expiries}) на сервере CS:GO игроку {parser[-1]} ("https://steamcommunity.com/id/{parser[0]}") — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
-                    else:
-                        await Errors.custom_msg_embed(self, ctx, 'Не удалось отправить/сохранить данные в БД')
-                        logger.error(f'Не удалось отправить/сохранить данные о новой привилегии игрока на сервере CS:GO в БД — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
+                    await self.csgo_give_privillege_dtdb(ctx, parser[0], expiries, steamid3, parser[-1], timestamp, privillege, result_timestamp)
 
                 elif type(data_from_db) is tuple and data_from_db[0] == int(steamid3):
-                    emb = discord.Embed(title = f'У игрока уже есть привилегия на сервере CS:GO', color = colors['error'])
-                    emb.set_author(name = 'Ошибка', icon_url = avatar(ctx.author))
-                    emb.add_field(name = f'{self.emoji["steam_user"]} Ник', value = data_from_db[1], inline = True)
-                    emb.add_field(name = f'{self.emoji["steam"]} SteamID3', value = data_from_db[0], inline = True)
-                    emb.add_field(name = f'{self.emoji["start"]} Активность', value = f'<t:{data_from_db[2]}:D>\n<t:{data_from_db[2]}:R>', inline = True)
-                    emb.add_field(name = f'{self.emoji["privillege"]} Привилегия', value = data_from_db[4], inline = True)
-                    emb.add_field(name = f'{self.emoji["expiries"]} Срок', value = f'<t:{data_from_db[5]}:D>\n<t:{data_from_db[5]}:R>', inline = True)
-                    emb.add_field(name = f'{self.emoji["steam"]} Профиль в стиме', value= f'[Тык](https://steamcommunity.com/id/{parser[0]})', inline = True)
-                    emb.set_thumbnail(url = imgs['error'])
-                    emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
-                    await ctx.send(embed = emb)
-                    logger.info(f'У игрока {parser[-1]} ("https://steamcommunity.com/id/{parser[0]}") уже есть привилегия {data_from_db[4]} (Срок: {data_from_db[5]}) на сервере CS:GO — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
-
+                    if int(data_from_db[5]) > int(timestamp):
+                        emb = discord.Embed(title = f'У игрока уже есть привилегия на сервере CS:GO', color = colors['error'])
+                        emb.set_author(name = 'Ошибка', icon_url = avatar(ctx.author))
+                        emb.add_field(name = f'{self.emoji["steam_user"]} Ник', value = data_from_db[1], inline = True)
+                        emb.add_field(name = f'{self.emoji["steam"]} SteamID3', value = data_from_db[0], inline = True)
+                        emb.add_field(name = f'{self.emoji["start"]} Активность', value = f'<t:{data_from_db[2]}:D>\n<t:{data_from_db[2]}:R>', inline = True)
+                        emb.add_field(name = f'{self.emoji["privillege"]} Привилегия', value = data_from_db[4], inline = True)
+                        emb.add_field(name = f'{self.emoji["expiries"]} Срок', value = f'<t:{data_from_db[5]}:D>\n<t:{data_from_db[5]}:R>', inline = True)
+                        emb.add_field(name = f'{self.emoji["steam"]} Профиль в стиме', value= f'[Тык](https://steamcommunity.com/id/{parser[0]})', inline = True)
+                        emb.set_thumbnail(url = imgs['error'])
+                        emb.set_footer(text = 'Aki © 2022 Все права защищены', icon_url = self.bot.user.avatar_url)
+                        await ctx.send(embed = emb)
+                        logger.info(f'У игрока {parser[-1]} ("https://steamcommunity.com/id/{parser[0]}") уже есть привилегия {data_from_db[4]} (Срок: {data_from_db[5]}) на сервере CS:GO — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
+                    else:
+                        await self.csgo_give_privillege_dtdb(ctx, parser[0], expiries, steamid3, parser[-1], timestamp, privillege, result_timestamp)
                 elif data_from_db is False:
                     await Errors.custom_msg_embed(self, ctx, 'Не удалось получить данные из БД')
                     logger.error(f'Не удалось получить данные из БД — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
