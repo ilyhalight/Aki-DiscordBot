@@ -59,7 +59,7 @@ class Giveaway(commands.Cog):
         winners_text = 'Победители'
         top_places = ''
         alternative_time = ''
-        if int(winners) > 0 and all(giveaway_time, text): # Если победителей > 0, есть время и есть текст
+        if int(winners) > 0 and all((giveaway_time, text)): # Если победителей > 0, есть время и есть текст
             for s in giveaway_time: # Раскладываем переменную giveaway_time на буквы
                 if s.lower() in time_rotation: # Проверяем есть ли в переменной giveaway_time буква совпадающающая со словарём time_rotation
                     intermediate_time = time_rotation[s.lower()] # Если такая буква есть, заносим её в новую переменную
@@ -103,8 +103,8 @@ class Giveaway(commands.Cog):
     @giveaway_command.error
     async def giveaway_command_error(self, ctx, error):
         if isinstance (error, commands.MissingRequiredArgument):
-            self.giveaway_helper(ctx)
-            logger.info(f'Выведена информация о "Создании розыгрыша" — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
+            await self.giveaway_helper(ctx)
+            logger.error(f'Не удалось создать розыгрыш - Причина: Недостаточно аргументов — Запросил пользователь: {ctx.author} ({ctx.author.id}).')
             logger.error(error)
         else:
             await Errors.custom_msg_embed(self, ctx, error)
