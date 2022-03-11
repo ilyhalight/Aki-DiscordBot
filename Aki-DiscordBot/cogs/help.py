@@ -16,13 +16,15 @@ from cogs.channel_info import ChannelInfo
 # from cogs.crypto_currency import CryptoCurrency
 from cogs.csgo_give_privillege import CSGOGivePrivillege
 from cogs.csgo_remove_privillege import CSGORemovePrivillege
-# from cogs.currency import Currency
+from cogs.currency import Currency
 from cogs.giveaway import Giveaway
 from cogs.random import Random
 from cogs.reactions import Reactions
 from cogs.resource import Resource
 from cogs.steam_info import SteamInfo
 from cogs.tiny_url import TinyUrl
+from cogs.timeout import Timeout
+from cogs.untimeout import UnTimeout
 
 
 class Help(commands.Cog):
@@ -82,6 +84,8 @@ class Help(commands.Cog):
 
             try:
                 Giveaway.giveaway_help(self, settings["prefix"], emb)
+                Timeout.timeout_help(self, settings["prefix"], emb)
+                UnTimeout.untimeout_help(self, settings["prefix"], emb)
                 Reactions.reactions_help(self, settings["prefix"], emb)
             except:
                 emb.add_field(name = f'Ошибка', value = 'Не удалось загрузить команды', inline = False)
@@ -124,7 +128,7 @@ class Help(commands.Cog):
                 Avatar.avatar_help(self, settings["prefix"], emb)
                 Random.random_help(self, settings["prefix"], emb)
                 # CryptoCurrency.cryptocurrency_help(self, settings["prefix"], emb)
-                # Currency.currency_help(self, settings["prefix"], emb)
+                Currency.currency_help(self, settings["prefix"], emb)
                 TinyUrl.tinyurl_help(self, settings["prefix"], emb)
                 SteamInfo.steaminfo_help(self, settings["prefix"], emb)
             except:
